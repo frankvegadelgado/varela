@@ -59,7 +59,7 @@ This represents a 5x5 matrix where each line corresponds to a row, and '1' indic
 
 _Example Solution:_
 
-Vertex Cover Found `0, 1, 4`: Nodes `0, 1, 4` form an optimal solution.
+Vertex Cover Found `0, 1, 4`: Nodes `0`, `1`, and `4` constitute an optimal solution.
 
 ---
 
@@ -81,7 +81,7 @@ Vertex Cover Found `0, 1, 4`: Nodes `0, 1, 4` form an optimal solution.
 
 Key Features:
 
-- Polynomial-time complexity: O(V³)
+- Polynomial-time complexity: O($|E|^3$)
 - Approximation ratio: ≤ 7/5 for large graphs
 - Suitable for large, sparse graphs
 
