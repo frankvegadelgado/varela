@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.0.1"
+VERSION = "0.0.2"
 
 NAME = "varela"
 
@@ -19,6 +19,7 @@ setuptools.setup(
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
+        "Documentation Research": "https://www.researchgate.net/publication/388728980_Approximation_Algorithms_for_NP-hard_Problems",
     },
     author="Frank Vega",
     author_email="vega.frank@gmail.com",

@@ -2,6 +2,8 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
+This work builds upon [Approximation Algorithms for NP-hard Problems](https://www.researchgate.net/publication/388728980_Approximation_Algorithms_for_NP-hard_Problems).
+
 ---
 
 # The Minimum Vertex Cover Problem
@@ -65,57 +67,97 @@ Vertex Cover Found `0, 1, 4`: Nodes `0, 1, 4` form an optimal solution.
 
 ## Algorithm Overview
 
-1. **Input Validation:**
+1. **Input**: Adjacency matrix of graph G
+2. **Create Edge Graph**:
+   - Nodes represent edges of G
+   - Connect nodes if edges share a vertex
+3. **Find Minimum Edge Cover** in edge graph
+4. **Extract Vertex Cover**:
+   - Add common vertices from edge cover
+5. **Handle Isolated Edges**:
+   - Add vertices for uncovered edges
+6. **Remove Redundant Vertices**
+7. **Output**: Approximate minimum vertex cover
 
-   - Checks if the input is a valid SciPy sparse matrix.
-   - Ensures the matrix is square (representing an adjacency matrix).
+Key Features:
 
-2. **Empty Graph Handling:**
+- Polynomial-time complexity: O(V³)
+- Approximation ratio: ≤ 7/5 for large graphs
+- Suitable for large, sparse graphs
 
-   - Returns `None` if the input graph is empty (no vertices or edges).
+## Correctness
 
-3. **Graph Conversion:**
+1. **Edge Graph Construction**
 
-   - Converts the sparse adjacency matrix to a NetworkX graph for easier manipulation.
+   - Preserves edge relationships of original graph
 
-4. **Edge Graph Construction:**
+2. **Minimum Edge Cover**
 
-   - Creates a new graph called the "edge graph."
-   - Each _node_ in the edge graph represents an _edge_ in the original graph.
-   - An _edge_ is added between two nodes in the edge graph if the corresponding edges in the original graph share a vertex.
+   - Ensures every edge in edge graph is covered
 
-5. **Minimum Edge Cover:**
+3. **Vertex Cover Extraction**
 
-   - Computes a minimum edge cover of the edge graph using `nx.min_edge_cover()`. This function typically uses matching techniques.
+   - Guarantees at least one endpoint of each edge is in cover
 
-6. **Vertex Cover from Edge Cover:**
+4. **Isolated Edge Handling**
 
-   - Iterates through the edges in the minimum edge cover of the edge graph.
-   - For each edge in the edge cover, identifies the corresponding edges in the original graph (using the computed mapping).
-   - Finds the common vertex between these two original edges.
-   - Adds this common vertex to the vertex cover.
+   - Covers any remaining uncovered edges
 
-7. **Isolated Edge Handling (Heuristic):**
+5. **Redundancy Removal**
+   - Optimizes cover size while maintaining validity
 
-   - Iterates through the edges in the original graph.
-   - If an edge has _both_ endpoints _not_ in the current vertex cover, adds one of the endpoints to the vertex cover. This is intended to handle edges that might not have been covered by the edge cover step.
+Correctness Guarantee:
 
-8. **Redundancy Removal (Heuristic):**
-   - Iterates through the vertices in the approximate vertex cover.
-   - For each vertex, checks if removing it still results in a valid vertex cover (using `utils.is_vertex_cover()`).
-   - If removing the vertex results in a valid cover, the vertex is removed. This step attempts to reduce the size of the cover.
+- Every edge in original graph has at least one endpoint in cover
+- Resulting set is a valid, approximate minimum vertex cover
+
+Approximation Quality:
+
+- Achieves ≤ 7/5 approximation ratio for large graphs
+- Trade-off between accuracy and polynomial-time efficiency
 
 ## Runtime Analysis
 
-- **Edge Graph Construction:** $O(|E|^2)$ in the worst case.
-- **Minimum Edge Cover:** The complexity of `nx.min_edge_cover()` depends on the underlying algorithm used, but it's typically polynomial (e.g., $O(|V|^3)$ if based on matching). Here, $|V|$ refers to the number of nodes in the _edge graph_, which is equal to the number of edges in the original graph ($|E|$). So, this step is likely $O(|E|^3)$.
-- **Vertex Cover Construction (from Edge Cover):** $O(|E|)$, as it iterates through the edges in the edge cover.
-- **Isolated Edge Handling:** $O(|E|)$.
-- **Redundancy Removal:** $O(|V||E|)$.
+This section analyzes the runtime and space complexity of the given vertex cover approximation algorithm.
 
-**Overall Runtime:** The dominant factor is likely the minimum edge cover calculation on the edge graph, making the overall runtime likely $O(|E|^3)$. However, the $O(|E|^2)$ from the edge graph construction is also significant.
+### Time Complexity Breakdown
 
-**Important Note:** The runtime analysis is based on the number of edges in the original graph ($|E|$) because the edge graph's size is proportional to $|E|$.
+1. **Input Processing and Graph Creation:** $O(|E|)$
+
+   - $|E|$ represents the number of edges in the input graph.
+   - This step involves converting the sparse matrix representation to a NetworkX graph, which iterates through the non-zero entries (edges).
+
+2. **Edge Graph Construction:** $O(|E| \Delta)$
+
+   - $\Delta$ represents the maximum degree of any vertex in the graph.
+   - For each edge in the original graph, we examine its endpoints' neighbors to create corresponding edges in the edge graph. The number of neighbors is bounded by $\Delta$.
+
+3. **Minimum Edge Cover Computation:** $O(|E|^3)$
+
+   - This step utilizes the `nx.min_edge_cover()` function. The complexity relates to the number of _nodes_ in the edge graph (which is $|E|$). The complexity is therefore $O(|E|^3)$.
+
+4. **Vertex Cover Extraction:** $O(|E|)$
+
+   - This step iterates through the edges in the computed minimum edge cover, which is bounded by the number of edges in the original graph.
+
+5. **Isolated Edge Handling:** $O(|E|)$
+
+   - We iterate through all edges in the original graph to handle any isolated edges.
+
+6. **Redundancy Removal:** $O(k |E|)$, or $O(|E|^2)$ in the worst case.
+   - $k$ is the size of the vertex cover. In the worst-case, the size of the vertex cover can be $O(|E|)$, so the overall time complexity is $O(|E|^2)$.
+   - For each vertex in the (potentially large) vertex cover, we check if its removal still leaves a valid cover. This check involves examining all edges.
+
+### Overall Complexity
+
+- **Time Complexity:** $O(|E|^3)$ (dominated by the minimum edge cover computation).
+- **Space Complexity:** $O(|V| + |E| + |E|\Delta)$. In the worst-case scenario (dense graphs where $E = O(|V|^2)$ and $\Delta = O(|V|)$), this becomes $O(|V|^3)$.
+
+### Key Observations
+
+- This algorithm provides an _approximation_ of the minimum vertex cover, trading accuracy for a polynomial runtime.
+- The practical runtime performance can often be significantly better than the worst-case theoretical bound, especially for sparse graphs.
+- This approach is suitable for large graphs where computing the _exact_ minimum vertex cover is computationally infeasible.
 
 ---
 

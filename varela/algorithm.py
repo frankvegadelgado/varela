@@ -55,7 +55,6 @@ def find_vertex_cover(adjacency_matrix):
                 edge_graph.add_edge(edge, adjacent_edge)
 
     # Find the minimum edge cover in the edge graph
-    # It's solved by employing matching techniques in O(|V|^3)
     min_edge_cover = nx.min_edge_cover(edge_graph)
 
     # Convert the edge cover back to a vertex cover
