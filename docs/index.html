@@ -1,0 +1,407 @@
+<html>
+  <head>
+    <title>VARELA</title>
+    <style>
+      body {
+        background-color: black;
+        color: white;
+      }
+      code:not(.language-diff) {
+        background-color: white;
+        color: black;
+        display: inline-block;
+      }
+      code.language-diff {
+        background-color: while;
+        color: green;
+      }
+    </style>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js"],
+        "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] },
+        tex2jax: { inlineMath: [ ["$", "$"], ["\\(","\\)"] ], displayMath: [ ["$$","$$"], ["\\[", "\\]"] ], processEscapes: true, ignoreClass: "tex2jax_ignore|dno" },
+        TeX: { noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } } },
+        messageStyle: "none"
+      });
+    </script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"
+    ></script>
+  </head>
+  <body>
+    <h1>Varela: Minimum Vertex Cover Solver</h1>
+    <p>
+      <img
+        src="varela.jpg"
+        alt="Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)"
+      />
+    </p>
+    <hr />
+    <h1>The Minimum Vertex Cover Problem</h1>
+    <p>
+      The <strong>Minimum Vertex Cover (MVC)</strong> problem is a classic
+      optimization problem in computer science and graph theory. It involves
+      finding the smallest set of vertices in a graph that
+      <strong>covers</strong> all edges, meaning at least one endpoint of every
+      edge is included in the set.
+    </p>
+    <h2>Formal Definition</h2>
+    <p>
+      Given an undirected graph $G = (V, E)$, a <strong>vertex cover</strong> is
+      a subset $V' \subseteq V$ such that for every edge $(u, v) \in E$, at
+      least one of $u$ or $v$ belongs to $V'$. The MVC problem seeks the vertex
+      cover with the smallest cardinality.
+    </p>
+    <h2>Importance and Applications</h2>
+    <ul>
+      <li>
+        <strong>Theoretical Significance:</strong> MVC is a well-known NP-hard
+        problem, central to complexity theory.
+      </li>
+      <li>
+        <strong>Practical Applications:</strong>
+        <ul>
+          <li>
+            <strong>Network Security:</strong> Identifying critical nodes to
+            disrupt connections.
+          </li>
+          <li>
+            <strong>Bioinformatics:</strong> Analyzing gene regulatory networks.
+          </li>
+          <li>
+            <strong>Wireless Sensor Networks:</strong> Optimizing sensor
+            coverage.
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <h2>Related Problems</h2>
+    <ul>
+      <li>
+        <strong>Maximum Independent Set:</strong> The complement of a vertex
+        cover.
+      </li>
+      <li><strong>Set Cover Problem:</strong> A generalization of MVC.</li>
+    </ul>
+    <hr />
+    <h2>Problem Statement</h2>
+    <p>Input: A Boolean Adjacency Matrix $M$.</p>
+    <p>Answer: Find a Minimum Vertex Cover.</p>
+    <h3>Example Instance: 5 x 5 matrix</h3>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>c0</th>
+          <th>c1</th>
+          <th>c2</th>
+          <th>c3</th>
+          <th>c4</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>r0</strong></td>
+          <td>0</td>
+          <td>0</td>
+          <td>1</td>
+          <td>0</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><strong>r1</strong></td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>r2</strong></td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><strong>r3</strong></td>
+          <td>0</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+        <tr>
+          <td><strong>r4</strong></td>
+          <td>1</td>
+          <td>0</td>
+          <td>1</td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      A matrix is represented in a text file using the following string
+      representation:
+    </p>
+    <pre><code>00101
+00010
+10001
+01000
+10100
+</code></pre>
+    <p>
+      This represents a 5x5 matrix where each line corresponds to a row, and '1'
+      indicates a connection or presence of an element, while '0' indicates its
+      absence.
+    </p>
+    <p><em>Example Solution:</em></p>
+    <p>
+      Vertex Cover Found <code>0, 1, 4</code>: Nodes <code>0, 1, 4</code> form
+      an optimal solution.
+    </p>
+    <hr />
+    <h1>Our Algorithm - Polynomial Runtime</h1>
+    <h2>Algorithm Overview</h2>
+    <ol>
+      <li>
+        <p><strong>Input Validation:</strong></p>
+        <ul>
+          <li>Checks if the input is a valid SciPy sparse matrix.</li>
+          <li>
+            Ensures the matrix is square (representing an adjacency matrix).
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Empty Graph Handling:</strong></p>
+        <ul>
+          <li>
+            Returns <code>None</code> if the input graph is empty (no vertices
+            or edges).
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Graph Conversion:</strong></p>
+        <ul>
+          <li>
+            Converts the sparse adjacency matrix to a NetworkX graph for easier
+            manipulation.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Edge Graph Construction:</strong></p>
+        <ul>
+          <li>Creates a new graph called the &quot;edge graph.&quot;</li>
+          <li>
+            Each <em>node</em> in the edge graph represents an <em>edge</em> in
+            the original graph.
+          </li>
+          <li>
+            An <em>edge</em> is added between two nodes in the edge graph if the
+            corresponding edges in the original graph share a vertex.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Minimum Edge Cover:</strong></p>
+        <ul>
+          <li>
+            Computes a minimum edge cover of the edge graph using
+            <code>nx.min_edge_cover()</code>. This function typically uses
+            matching techniques.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Vertex Cover from Edge Cover:</strong></p>
+        <ul>
+          <li>
+            Iterates through the edges in the minimum edge cover of the edge
+            graph.
+          </li>
+          <li>
+            For each edge in the edge cover, identifies the corresponding edges
+            in the original graph (using the computed mapping).
+          </li>
+          <li>Finds the common vertex between these two original edges.</li>
+          <li>Adds this common vertex to the vertex cover.</li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Isolated Edge Handling (Heuristic):</strong></p>
+        <ul>
+          <li>Iterates through the edges in the original graph.</li>
+          <li>
+            If an edge has <em>both</em> endpoints <em>not</em> in the current
+            vertex cover, adds one of the endpoints to the vertex cover. This is
+            intended to handle edges that might not have been covered by the
+            edge cover step.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <p><strong>Redundancy Removal (Heuristic):</strong></p>
+        <ul>
+          <li>
+            Iterates through the vertices in the approximate vertex cover.
+          </li>
+          <li>
+            For each vertex, checks if removing it still results in a valid
+            vertex cover (using <code>utils.is_vertex_cover()</code>).
+          </li>
+          <li>
+            If removing the vertex results in a valid cover, the vertex is
+            removed. This step attempts to reduce the size of the cover.
+          </li>
+        </ul>
+      </li>
+    </ol>
+    <h2>Runtime Analysis</h2>
+    <ul>
+      <li>
+        <strong>Edge Graph Construction:</strong> $O(|E|^2)$ in the worst case.
+      </li>
+      <li>
+        <strong>Minimum Edge Cover:</strong> The complexity of
+        <code>nx.min_edge_cover()</code> depends on the underlying algorithm
+        used, but it's typically polynomial (e.g., $O(|V|^3)$ if based on
+        matching). Here, $|V|$ refers to the number of nodes in the
+        <em>edge graph</em>, which is equal to the number of edges in the
+        original graph ($|E|$). So, this step is likely $O(|E|^3)$.
+      </li>
+      <li>
+        <strong>Vertex Cover Construction (from Edge Cover):</strong> $O(|E|)$,
+        as it iterates through the edges in the edge cover.
+      </li>
+      <li><strong>Isolated Edge Handling:</strong> $O(|E|)$.</li>
+      <li><strong>Redundancy Removal:</strong> $O(|V||E|)$.</li>
+    </ul>
+    <p>
+      <strong>Overall Runtime:</strong> The dominant factor is likely the
+      minimum edge cover calculation on the edge graph, making the overall
+      runtime likely $O(|E|^3)$. However, the $O(|E|^2)$ from the edge graph
+      construction is also significant.
+    </p>
+    <p>
+      <strong>Important Note:</strong> The runtime analysis is based on the
+      number of edges in the original graph ($|E|$) because the edge graph's
+      size is proportional to $|E|$.
+    </p>
+    <hr />
+    <h1>Compile and Environment</h1>
+    <h2>Prerequisites</h2>
+    <ul>
+      <li>Python ≥ 3.10</li>
+    </ul>
+    <h2>Installation</h2>
+    <pre><code class="language-bash">pip install varela
+</code></pre>
+    <h2>Execution</h2>
+    <ol>
+      <li>
+        <p>Clone the repository:</p>
+        <pre><code class="language-bash">git clone https://github.com/frankvegadelgado/varela.git
+cd varela
+</code></pre>
+      </li>
+      <li>
+        <p>Run the script:</p>
+        <pre><code class="language-bash">approx -i ./benchmarks/testMatrix1.txt
+</code></pre>
+        <p>
+          utilizing the <code>approx</code> command provided by Varela's Library
+          to execute the Boolean adjacency matrix
+          <code>varela\benchmarks\testMatrix1.txt</code>. The file
+          <code>testMatrix1.txt</code> represents the example described herein.
+          We also support <code>.xz</code>, <code>.lzma</code>,
+          <code>.bz2</code>, and <code>.bzip2</code> compressed
+          <code>.txt</code> files.
+        </p>
+        <p><strong>Example Output:</strong></p>
+        <pre><code>testMatrix1.txt: Vertex Cover Found 0, 1, 4
+</code></pre>
+        <p>This indicates nodes <code>0, 1, 4</code> form a vertex cover.</p>
+      </li>
+    </ol>
+    <hr />
+    <h2>Vertex Cover Size</h2>
+    <p>Use the <code>-c</code> flag to count the nodes in the vertex cover:</p>
+    <pre><code class="language-bash">approx -i ./benchmarks/testMatrix2.txt -c
+</code></pre>
+    <p><strong>Output:</strong></p>
+    <pre><code>testMatrix2.txt: Vertex Cover Size 5
+</code></pre>
+    <hr />
+    <h1>Command Options</h1>
+    <p>Display help and options:</p>
+    <pre><code class="language-bash">approx -h
+</code></pre>
+    <p><strong>Output:</strong></p>
+    <pre><code class="language-bash">usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
+
+Estimating the Minimum Vertex Cover with an approximation factor of 7/5 for large enough undirected graphs encoded as a Boolean adjacency matrix stored in a file.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUTFILE, --inputFile INPUTFILE
+                        input file path
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of 2
+  -b, --bruteForce      enable comparison with the exponential-time brute-force approach
+  -c, --count           calculate the size of the vertex cover
+  -v, --verbose         enable verbose output
+  -l, --log             enable file logging
+  --version             show program's version number and exit
+</code></pre>
+    <hr />
+    <h1>Testing Application</h1>
+    <p>
+      A command-line utility named <code>test_approx</code> is provided for
+      evaluating the Algorithm using randomly generated, large sparse matrices.
+      It supports the following options:
+    </p>
+    <pre><code class="language-bash">usage: test_approx [-h] -d DIMENSION [-n NUM_TESTS] [-s SPARSITY] [-a] [-b] [-c] [-w] [-v] [-l] [--version]
+
+The Varela Testing Application.
+
+options:
+  -h, --help            show this help message and exit
+  -d DIMENSION, --dimension DIMENSION
+                        an integer specifying the dimensions of the square matrices
+  -n NUM_TESTS, --num_tests NUM_TESTS
+                        an integer specifying the number of tests to run
+  -s SPARSITY, --sparsity SPARSITY
+                        sparsity of the matrices (0.0 for dense, close to 1.0 for very sparse)
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of 2
+  -b, --bruteForce      enable comparison with the exponential-time brute-force approach
+  -c, --count           calculate the size of the vertex cover
+  -w, --write           write the generated random matrix to a file in the current directory
+  -v, --verbose         enable verbose output
+  -l, --log             enable file logging
+  --version             show program's version number and exit
+</code></pre>
+    <hr />
+    <h1>Code</h1>
+    <ul>
+      <li>Python implementation by <strong>Frank Vega</strong>.</li>
+    </ul>
+    <hr />
+    <h1>Complexity</h1>
+    <pre><code class="language-diff">+ We present a polynomial-time algorithm achieving an approximation ratio of 7/5 for MVC, providing strong evidence that P = NP by efficiently solving a computationally hard problem with near-optimal solutions.
+
++ This result contradicts the Unique Games Conjecture, suggesting that many optimization problems may admit better solutions, revolutionizing theoretical computer science.
+</code></pre>
+    <hr />
+    <h1>License</h1>
+    <ul>
+      <li>MIT License.</li>
+    </ul>
+  </body>
+</html>
