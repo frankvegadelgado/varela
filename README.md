@@ -82,7 +82,7 @@ Vertex Cover Found `0, 1, 4`: Nodes `0`, `1`, and `4` constitute an optimal solu
 Key Features:
 
 - Polynomial-time complexity: O($|E|^3$)
-- Approximation ratio: ≤ 3/2 for large graphs
+- Approximation ratio: ≤ 3/2
 - Suitable for large, sparse graphs
 
 ## Correctness
@@ -113,7 +113,7 @@ Correctness Guarantee:
 
 Approximation Quality:
 
-- Achieves ≤ 3/2 approximation ratio for large graphs
+- Achieves ≤ 3/2 approximation ratio
 - Trade-off between accuracy and polynomial-time efficiency
 
 ## Runtime Analysis
@@ -157,7 +157,7 @@ This section analyzes the runtime and space complexity of the given vertex cover
 
 - This algorithm provides an _approximation_ of the minimum vertex cover, trading accuracy for a polynomial runtime.
 - The practical runtime performance can often be significantly better than the worst-case theoretical bound, especially for sparse graphs.
-- This approach is suitable for large graphs where computing the _exact_ minimum vertex cover is computationally infeasible.
+- This approach is suitable for sparse and large graphs where computing the _exact_ minimum vertex cover is computationally infeasible.
 
 ---
 
