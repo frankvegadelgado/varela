@@ -82,7 +82,7 @@ Vertex Cover Found `0, 1, 4`: Nodes `0`, `1`, and `4` constitute an optimal solu
 Key Features:
 
 - Polynomial-time complexity: O($|E|^3$)
-- Approximation ratio: ≤ 7/5 for large graphs
+- Approximation ratio: ≤ 3/2 for large graphs
 - Suitable for large, sparse graphs
 
 ## Correctness
@@ -113,7 +113,7 @@ Correctness Guarantee:
 
 Approximation Quality:
 
-- Achieves ≤ 7/5 approximation ratio for large graphs
+- Achieves ≤ 3/2 approximation ratio for large graphs
 - Trade-off between accuracy and polynomial-time efficiency
 
 ## Runtime Analysis
@@ -229,7 +229,7 @@ approx -h
 ```bash
 usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 7/5 for large enough undirected graphs encoded as a Boolean adjacency matrix stored in a file.
+Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded as a Boolean adjacency matrix stored in a file.
 
 options:
   -h, --help            show this help message and exit
@@ -282,8 +282,6 @@ options:
 # Complexity
 
 ```diff
-+ We present a polynomial-time algorithm achieving an approximation ratio of ≤ 7/5 for MVC, providing strong evidence that P = NP by efficiently solving a computationally hard problem with near-optimal solutions.
-
 + This result contradicts the Unique Games Conjecture, suggesting that many optimization problems may admit better solutions, revolutionizing theoretical computer science.
 ```
 

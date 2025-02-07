@@ -203,7 +203,7 @@
     <p>Key Features:</p>
     <ul>
       <li>Polynomial-time complexity: O($|E|^3$)</li>
-      <li>Approximation ratio: ≤ 7/5 for large graphs</li>
+      <li>Approximation ratio: ≤ 3/2 for large graphs</li>
       <li>Suitable for large, sparse graphs</li>
     </ul>
     <h2>Correctness</h2>
@@ -246,7 +246,7 @@
     </ul>
     <p>Approximation Quality:</p>
     <ul>
-      <li>Achieves ≤ 7/5 approximation ratio for large graphs</li>
+      <li>Achieves ≤ 3/2 approximation ratio for large graphs</li>
       <li>Trade-off between accuracy and polynomial-time efficiency</li>
     </ul>
     <h2>Runtime Analysis</h2>
@@ -406,7 +406,7 @@ cd varela
     <p><strong>Output:</strong></p>
     <pre><code class="language-bash">usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 7/5 for large enough undirected graphs encoded as a Boolean adjacency matrix stored in a file.
+Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded as a Boolean adjacency matrix stored in a file.
 
 options:
   -h, --help            show this help message and exit
@@ -453,9 +453,7 @@ options:
     </ul>
     <hr />
     <h1>Complexity</h1>
-    <pre><code class="language-diff">+ We present a polynomial-time algorithm achieving an approximation ratio of ≤ 7/5 for MVC, providing strong evidence that P = NP by efficiently solving a computationally hard problem with near-optimal solutions.
-
-+ This result contradicts the Unique Games Conjecture, suggesting that many optimization problems may admit better solutions, revolutionizing theoretical computer science.
+    <pre><code class="language-diff">+ This result contradicts the Unique Games Conjecture, suggesting that many optimization problems may admit better solutions, revolutionizing theoretical computer science.
 </code></pre>
     <hr />
     <h1>License</h1>

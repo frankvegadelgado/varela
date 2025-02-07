@@ -9,7 +9,7 @@ from . import utils
 
 def find_vertex_cover(adjacency_matrix):
     """
-    Calculates an approximate vertex cover in polynomial time with an approximation ratio of ≤ 7/5 for large enough undirected graphs.
+    Calculates an approximate vertex cover in polynomial time with an approximation ratio of ≤ 3/2 for an undirected graph.
 
     Args:
         adjacency_matrix: A SciPy sparse adjacency matrix.
@@ -31,7 +31,7 @@ def find_vertex_cover(adjacency_matrix):
 
     # Handle empty graph
     if n == 0 or adjacency_matrix.nnz == 0:
-        return None  # Handle empty graph
+        return None
 
     # Convert the sparse matrix to a NetworkX graph
     # Avoid duplicates in undirected graphs
