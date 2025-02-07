@@ -2,7 +2,7 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [Approximation Algorithms for NP-hard Problems](https://www.researchgate.net/publication/388728980_Approximation_Algorithms_for_NP-hard_Problems).
+This work builds upon [The Unique Games Conjecture](https://www.researchgate.net/publication/388791285_The_Unique_Games_Conjecture).
 
 ---
 
@@ -235,7 +235,7 @@ options:
   -h, --help            show this help message and exit
   -i INPUTFILE, --inputFile INPUTFILE
                         input file path
-  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of 2
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -v, --verbose         enable verbose output
@@ -262,7 +262,7 @@ options:
                         an integer specifying the number of tests to run
   -s SPARSITY, --sparsity SPARSITY
                         sparsity of the matrices (0.0 for dense, close to 1.0 for very sparse)
-  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of 2
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -w, --write           write the generated random matrix to a file in the current directory

@@ -9,7 +9,7 @@ from . import utils
 
 def find_vertex_cover(adjacency_matrix):
     """
-    Calculates an approximate vertex cover in polynomial time with an approximation ratio of ≤ 3/2 for an undirected graph.
+    Computes an approximate vertex cover in polynomial time with an approximation ratio of at most 3/2 for undirected graphs.
 
     Args:
         adjacency_matrix: A SciPy sparse adjacency matrix.

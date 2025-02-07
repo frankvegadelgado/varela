@@ -16,12 +16,12 @@ def main():
     # Define the parameters
     helper = argparse.ArgumentParser(prog="approx", description='Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded as a Boolean adjacency matrix stored in a file.')
     helper.add_argument('-i', '--inputFile', type=str, help='input file path', required=True)
-    helper.add_argument('-a', '--approximation', action='store_true', help='enable comparison with a polynomial-time approximation approach within a factor of 2')
+    helper.add_argument('-a', '--approximation', action='store_true', help='enable comparison with a polynomial-time approximation approach within a factor of at most 2')
     helper.add_argument('-b', '--bruteForce', action='store_true', help='enable comparison with the exponential-time brute-force approach')
     helper.add_argument('-c', '--count', action='store_true', help='calculate the size of the vertex cover')
     helper.add_argument('-v', '--verbose', action='store_true', help='anable verbose output')
     helper.add_argument('-l', '--log', action='store_true', help='enable file logging')
-    helper.add_argument('--version', action='version', version='%(prog)s 0.0.4')
+    helper.add_argument('--version', action='version', version='%(prog)s 0.0.5')
     
     # Initialize the parameters
     args = helper.parse_args()
