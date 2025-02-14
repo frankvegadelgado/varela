@@ -87,10 +87,10 @@ Let $n$ be the number of vertices and $m$ be the number of edges in the graph.
 
 1. Finding connected components: $O(n + m)$
 2. For each component:
-   a. Creating line graph: $O(m^2)$
-   b. Finding minimum edge cover: $O(m^3)$
-   c. Converting edge cover to vertex cover: $O(m)$
-   d. Removing redundant vertices: $O(n m)$
+   - Creating line graph: $O(m^2)$
+   - Finding minimum edge cover: $O(m^3)$
+   - Converting edge cover to vertex cover: $O(m)$
+   - Removing redundant vertices: $O(n m)$
 
 Worst-case time complexity: $O(m^2 + m^3 + n m)$
 

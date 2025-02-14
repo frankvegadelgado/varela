@@ -39,6 +39,11 @@
         alt="Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)"
       />
     </p>
+    <p>
+      This work builds upon
+      <a href="https://hal.science/hal-04935775">The Unique Games Conjecture</a
+      >.
+    </p>
     <hr />
     <h1>The Minimum Vertex Cover Problem</h1>
     <p>
@@ -175,196 +180,104 @@ e 3 5
       <code>2</code>, and <code>3</code> constitute an optimal solution.
     </p>
     <hr />
-    <h1>Our Algorithm - Polynomial Runtime</h1>
-    <h2>Algorithm Overview</h2>
+    <h1>Approximate Vertex Cover Algorithm Analysis</h1>
+    <h2>Overview</h2>
+    <p>
+      This algorithm finds an approximate vertex cover for an undirected graph
+      with an approximation ratio of less than 2. It utilizes the NetworkX
+      library and employs the following key strategies:
+    </p>
     <ol>
-      <li><strong>Input</strong>: Adjacency matrix of graph G</li>
-      <li>
-        <strong>Create Edge Graph</strong>:
-        <ul>
-          <li>Nodes represent edges of G</li>
-          <li>Connect nodes if edges share a vertex</li>
-        </ul>
-      </li>
-      <li>
-        <strong>Find an Approximate Minimum Maximal Matching</strong> in edge
-        graph
-      </li>
-      <li>
-        <strong>Extract Vertex Cover</strong>:
-        <ul>
-          <li>Add common vertices from edge cover</li>
-        </ul>
-      </li>
-      <li>
-        <strong>Handle Isolated Edges</strong>:
-        <ul>
-          <li>Add vertices for uncovered edges</li>
-        </ul>
-      </li>
-      <li><strong>Remove Redundant Vertices</strong></li>
-      <li><strong>Output</strong>: Approximate minimum vertex cover</li>
+      <li>Processes connected components separately</li>
+      <li>Handles isolated edges as a special case</li>
+      <li>Transforms the problem using line graphs</li>
+      <li>Utilizes minimum edge cover to approximate vertex cover</li>
+      <li>Optimizes the solution by removing redundant vertices</li>
     </ol>
-    <p>Key Features:</p>
-    <ul>
-      <li>Polynomial-time complexity: $O(|V| |E|)$</li>
-      <li>Approximation ratio: &lt; 2</li>
-      <li>Suitable for large, sparse graphs</li>
-    </ul>
+    <h2>Runtime Analysis</h2>
+    <p>
+      Let $n$ be the number of vertices and $m$ be the number of edges in the
+      graph.
+    </p>
+    <ol>
+      <li>Finding connected components: $O(n + m)$</li>
+      <li>
+        For each component:
+        <ul>
+          <li>Creating line graph: $O(m^2)$</li>
+          <li>Finding minimum edge cover: $O(m^3)$</li>
+          <li>Converting edge cover to vertex cover: $O(m)$</li>
+          <li>Removing redundant vertices: $O(n m)$</li>
+        </ul>
+      </li>
+    </ol>
+    <p>Worst-case time complexity: $O(m^2 + m^3 + n m)$</p>
+    <p>
+      The dominant term is typically $O(m^3)$ from finding the minimum edge
+      cover.
+    </p>
     <h2>Correctness</h2>
     <ol>
       <li>
-        <p><strong>Edge Graph Construction</strong></p>
+        <p><strong>Approximation Guarantee</strong>:</p>
         <ul>
-          <li>Preserves edge relationships of original graph</li>
+          <li>
+            The algorithm leverages the relationship between edge covers in the
+            line graph and vertex covers in the original graph.
+          </li>
+          <li>
+            A minimum edge cover in the line graph corresponds to a set of edges
+            in the original graph that cover all vertices.
+          </li>
+          <li>
+            This relationship ensures an approximation ratio of less than 2.
+          </li>
         </ul>
       </li>
       <li>
-        <p><strong>Minimum Maximal Matching Approximation</strong></p>
+        <p><strong>Handling Special Cases</strong>:</p>
         <ul>
-          <li>Ensures every edge is incident to an edge in the matching</li>
+          <li>Empty graphs are correctly handled by returning None.</li>
+          <li>
+            Isolated edges (2-node subgraphs) are treated separately, ensuring
+            correctness for these simple cases.
+          </li>
         </ul>
       </li>
       <li>
-        <p><strong>Vertex Cover Extraction</strong></p>
+        <p><strong>Connected Components</strong>:</p>
         <ul>
-          <li>Guarantees at least one endpoint of each edge is in cover</li>
+          <li>
+            Processing each connected component separately ensures correctness
+            for disconnected graphs without affecting the approximation ratio.
+          </li>
         </ul>
       </li>
       <li>
-        <p><strong>Isolated Edge Handling</strong></p>
+        <p><strong>Optimization Step</strong>:</p>
         <ul>
-          <li>Covers any remaining uncovered edges</li>
+          <li>
+            Removing redundant vertices at the end maintains the vertex cover
+            property while potentially improving the approximation.
+          </li>
         </ul>
       </li>
       <li>
-        <p><strong>Redundancy Removal</strong></p>
+        <p><strong>Reliance on NetworkX</strong>:</p>
         <ul>
-          <li>Optimizes cover size while maintaining validity</li>
+          <li>
+            The correctness partly depends on the correct implementation of
+            NetworkX functions, particularly <code>min_edge_cover</code>.
+          </li>
         </ul>
       </li>
     </ol>
-    <p>Correctness Guarantee:</p>
-    <ul>
-      <li>Every edge in original graph has at least one endpoint in cover</li>
-      <li>Resulting set is a valid, approximate minimum vertex cover</li>
-    </ul>
-    <p>Approximation Quality:</p>
-    <ul>
-      <li>Achieves &lt; 2 approximation ratio</li>
-      <li>Trade-off between accuracy and polynomial-time efficiency</li>
-    </ul>
-    <h2>Runtime Analysis</h2>
     <p>
-      This section analyzes the runtime and space complexity of the given vertex
-      cover approximation algorithm.
+      While the algorithm provides a valid approximate vertex cover, its
+      practical efficiency may vary depending on the input graph's structure and
+      size. The use of line graphs might lead to increased memory usage for
+      dense graphs.
     </p>
-    <h3>Time Complexity Breakdown</h3>
-    <ol>
-      <li>
-        <p><strong>Input Processing and Graph Creation:</strong> $O(|E|)$</p>
-        <ul>
-          <li>$|E|$ represents the number of edges in the input graph.</li>
-          <li>
-            This step involves converting the sparse matrix representation to a
-            NetworkX graph, which iterates through the non-zero entries (edges).
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>Edge Graph Construction:</strong> $O(|E| \Delta)$</p>
-        <ul>
-          <li>
-            $\Delta$ represents the maximum degree of any vertex in the graph.
-          </li>
-          <li>
-            For each edge in the original graph, we examine its endpoints'
-            neighbors to create corresponding edges in the edge graph. The
-            number of neighbors is bounded by $\Delta$.
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>
-          <strong>Approximate Minimum Maximal Matching Computation:</strong>
-          $O(|E|\Delta)$
-        </p>
-        <ul>
-          <li>
-            This step utilizes the
-            <code>nx.approximation.min_maximal_matching()</code> function which
-            computes the minimum maximal matching with an approximation ratio of
-            at most 2. The complexity linearly relates to the number of
-            <em>edges</em> in the edge graph (which is $|E|\Delta$). The
-            complexity is therefore $O(|E|\Delta)$.
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>Vertex Cover Extraction:</strong> $O(|E|)$</p>
-        <ul>
-          <li>
-            This step iterates through the edges in the computed minimum edge
-            cover, which is bounded by the number of edges in the original
-            graph.
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p><strong>Isolated Edge Handling:</strong> $O(|E|)$</p>
-        <ul>
-          <li>
-            We iterate through all edges in the original graph to handle any
-            isolated edges.
-          </li>
-        </ul>
-      </li>
-      <li>
-        <p>
-          <strong>Redundancy Removal:</strong> $O(k |E|)$, or $O(|V| |E|)$ in
-          the worst case.
-        </p>
-        <ul>
-          <li>
-            $k$ is the size of the vertex cover. In the worst-case, the size of
-            the vertex cover can be $O(|V|)$, so the overall time complexity is
-            $O(|V| |E|)$.
-          </li>
-          <li>
-            For each vertex in the (potentially large) vertex cover, we check if
-            its removal still leaves a valid cover. This check involves
-            examining all edges.
-          </li>
-        </ul>
-      </li>
-    </ol>
-    <h3>Overall Complexity</h3>
-    <ul>
-      <li>
-        <strong>Time Complexity:</strong> $O(|V| |E|)$ (dominated by the removal
-        redundacy computation).
-      </li>
-      <li>
-        <strong>Space Complexity:</strong> $O(|V| + |E| + |E|\Delta)$. In the
-        worst-case scenario (dense graphs where $E = O(|V|^2)$ and $\Delta =
-        O(|V|)$), this becomes $O(|V|^3)$.
-      </li>
-    </ul>
-    <h3>Key Observations</h3>
-    <ul>
-      <li>
-        This algorithm provides an <em>approximation</em> of the minimum vertex
-        cover, trading accuracy for a polynomial runtime.
-      </li>
-      <li>
-        The practical runtime performance can often be significantly better than
-        the worst-case theoretical bound, especially for sparse graphs.
-      </li>
-      <li>
-        This approach is suitable for sparse and large graphs where computing
-        the <em>exact</em> minimum vertex cover is computationally infeasible.
-      </li>
-    </ul>
     <hr />
     <h1>Compile and Environment</h1>
     <h2>Prerequisites</h2>
@@ -425,7 +338,7 @@ options:
   -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
-  -v, --verbose         enable verbose output
+  -v, --verbose         anable verbose output
   -l, --log             enable file logging
   --version             show program's version number and exit
 </code></pre>
@@ -438,7 +351,7 @@ options:
     </p>
     <pre><code class="language-bash">usage: test_approx [-h] -d DIMENSION [-n NUM_TESTS] [-s SPARSITY] [-a] [-b] [-c] [-w] [-v] [-l] [--version]
 
-The Varela Testing Application.
+The Varela Testing Application using randomly generated, large sparse matrices.
 
 options:
   -h, --help            show this help message and exit
@@ -452,7 +365,7 @@ options:
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -w, --write           write the generated random matrix to a file in the current directory
-  -v, --verbose         enable verbose output
+  -v, --verbose         anable verbose output
   -l, --log             enable file logging
   --version             show program's version number and exit
 </code></pre>
@@ -460,7 +373,7 @@ options:
     <h1>Batch Execution</h1>
     <p>
       Batch execution allows you to solve multiple graphs within a directory
-      simultaneously.
+      consecutively.
     </p>
     <p>
       To view available command-line options for the
@@ -472,7 +385,8 @@ options:
     <p>This will display the following help information:</p>
     <pre><code class="language-bash">usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of &lt; 2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Estimating the Minimum Vertex Cover with an approximation factor of &lt; 2 for all undirected graphs encoded in DIMACS format
+and stored in a directory.
 
 options:
   -h, --help            show this help message and exit
