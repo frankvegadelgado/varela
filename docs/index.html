@@ -301,9 +301,9 @@ e 3 5
             This step utilizes the
             <code>nx.approximation.min_maximal_matching()</code> function which
             computes the minimum maximal matching with an approximation ratio of
-            at most 2. The complexity relates to the number of <em>edges</em> in
-            the edge graph (which is $|E|\Delta$). The complexity is therefore
-            $O(|E|\Delta)$.
+            at most 2. The complexity linearly relates to the number of
+            <em>edges</em> in the edge graph (which is $|E|\Delta$). The
+            complexity is therefore $O(|E|\Delta)$.
           </li>
         </ul>
       </li>
@@ -328,14 +328,14 @@ e 3 5
       </li>
       <li>
         <p>
-          <strong>Redundancy Removal:</strong> $O(k |E|)$, or $O(|E|^2)$ in the
-          worst case.
+          <strong>Redundancy Removal:</strong> $O(k |E|)$, or $O(|V| |E|)$ in
+          the worst case.
         </p>
         <ul>
           <li>
             $k$ is the size of the vertex cover. In the worst-case, the size of
-            the vertex cover can be $O(|E|)$, so the overall time complexity is
-            $O(|E|^2)$.
+            the vertex cover can be $O(|V|)$, so the overall time complexity is
+            $O(|V| |E|)$.
           </li>
           <li>
             For each vertex in the (potentially large) vertex cover, we check if
@@ -348,7 +348,7 @@ e 3 5
     <h3>Overall Complexity</h3>
     <ul>
       <li>
-        <strong>Time Complexity:</strong> $O(|E|^2)$ (dominated by the removal
+        <strong>Time Complexity:</strong> $O(|V| |E|)$ (dominated by the removal
         redundacy computation).
       </li>
       <li>

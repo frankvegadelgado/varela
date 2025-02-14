@@ -140,7 +140,7 @@ This section analyzes the runtime and space complexity of the given vertex cover
 
 3. **Approximate Minimum Maximal Matching Computation:** $O(|E|\Delta)$
 
-   - This step utilizes the `nx.approximation.min_maximal_matching()` function which computes the minimum maximal matching with an approximation ratio of at most 2. The complexity relates to the number of _edges_ in the edge graph (which is $|E|\Delta$). The complexity is therefore $O(|E|\Delta)$.
+   - This step utilizes the `nx.approximation.min_maximal_matching()` function which computes the minimum maximal matching with an approximation ratio of at most 2. The complexity linearly relates to the number of _edges_ in the edge graph (which is $|E|\Delta$). The complexity is therefore $O(|E|\Delta)$.
 
 4. **Vertex Cover Extraction:** $O(|E|)$
 
@@ -150,13 +150,13 @@ This section analyzes the runtime and space complexity of the given vertex cover
 
    - We iterate through all edges in the original graph to handle any isolated edges.
 
-6. **Redundancy Removal:** $O(k |E|)$, or $O(|E|^2)$ in the worst case.
-   - $k$ is the size of the vertex cover. In the worst-case, the size of the vertex cover can be $O(|E|)$, so the overall time complexity is $O(|E|^2)$.
+6. **Redundancy Removal:** $O(k |E|)$, or $O(|V| |E|)$ in the worst case.
+   - $k$ is the size of the vertex cover. In the worst-case, the size of the vertex cover can be $O(|V|)$, so the overall time complexity is $O(|V| |E|)$.
    - For each vertex in the (potentially large) vertex cover, we check if its removal still leaves a valid cover. This check involves examining all edges.
 
 ### Overall Complexity
 
-- **Time Complexity:** $O(|E|^2)$ (dominated by the removal redundacy computation).
+- **Time Complexity:** $O(|V| |E|)$ (dominated by the removal redundacy computation).
 - **Space Complexity:** $O(|V| + |E| + |E|\Delta)$. In the worst-case scenario (dense graphs where $E = O(|V|^2)$ and $\Delta = O(|V|)$), this becomes $O(|V|^3)$.
 
 ### Key Observations
