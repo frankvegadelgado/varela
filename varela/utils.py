@@ -156,17 +156,13 @@ def sparse_matrix_to_graph(adj_matrix, is_directed=False):
     if is_directed:
         graph = nx.DiGraph()
         for i, j in zip(rows, cols):
-            u = np.int64(i)
-            v = np.int64(j)
-            if not graph.has_edge(u, v): # Avoid duplicates in undirected graphs
-                graph.add_edge(u, v)
+            if not graph.has_edge(i, j): # Avoid duplicates in undirected graphs
+                graph.add_edge(i, j)
     else:
         graph = nx.Graph()
         for i, j in zip(rows, cols):
-            u = np.int64(i)
-            v = np.int64(j)
-            if not graph.has_edge(u, v) and not graph.has_edge(v, u): # Avoid duplicates in undirected graphs
-                graph.add_edge(u, v)
+            if not graph.has_edge(i, j) and not graph.has_edge(j, i): # Avoid duplicates in undirected graphs
+                graph.add_edge(i, j)
     
     return graph
 

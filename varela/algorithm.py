@@ -21,47 +21,38 @@ def find_vertex_cover(graph):
     if graph.number_of_nodes() == 0 or graph.number_of_edges() == 0:
         return None
     
-    # Upper bound
-    n = max(graph.nodes()) + 1
+    approximate_vertex_cover = set()
+    connected_components = nx.connected_components(graph)
+    for connected_component in connected_components:
+        subgraph = graph.subgraph(connected_component)
+        if subgraph.number_of_edges() > 0:
+            if subgraph.number_of_nodes() == 2:
+                # Include isolated edges
+                for u, _ in subgraph.edges():
+                    approximate_vertex_cover.add(u)
+            else:
+                
+                # Create an edge graph where each node represents an edge in the original graph
+                edge_graph = nx.line_graph(subgraph)                    
+    
+                # Find the minimum edge cover in the edge graph
+                min_edge_cover = nx.min_edge_cover(edge_graph)
 
-    # Create an edge graph where each node represents an edge in the original graph
-    edge_graph = nx.Graph()
-    for u, v in graph.edges():
-        # Minimum and maximum vertices
-        minimum = min(u, v)
-        maximum = max(u, v)
-        # Unique representation of the edge
-        edge = n * minimum + maximum
-        for a in graph.neighbors(minimum):
-            if maximum < a:
-                adjacent_edge = n * minimum + a
-                edge_graph.add_edge(edge, adjacent_edge)
-        for b in graph.neighbors(maximum):
-            if b < minimum:
-                adjacent_edge = n * b + maximum
-                edge_graph.add_edge(edge, adjacent_edge)
+                # Convert the edge matching back to a vertex cover
+                candidate_vertex_cover = set()
+                for edge1, edge2 in min_edge_cover:
+                    # Extract the common vertex between the two edges
+                    common_vertex = edge1[0] if edge1[0] == edge2[0] else edge1[1]
+                    candidate_vertex_cover.add(common_vertex)
 
-    # Find the minimum maximal matching in the edge graph
-    min_maximal_matching = nx.approximation.min_maximal_matching(edge_graph)
+                # Remove redundant vertices from the vertex cover
+                vertex_cover = set(candidate_vertex_cover)
+                for u in candidate_vertex_cover:
+                    # Check if removing the vertex still results in a valid vertex cover
+                    if utils.is_vertex_cover(subgraph, vertex_cover - {u}):
+                        vertex_cover.remove(u)
 
-    # Convert the edge matching back to a vertex cover
-    vertex_cover = set()
-    for edge1, edge2 in min_maximal_matching:
-        # Extract the common vertex between the two edges
-        common_vertex = (edge1 // n) if (edge1 // n) == (edge2 // n) else (edge1 % n)
-        vertex_cover.add(common_vertex)
-
-    # Include isolated edges (edges not covered by the vertex cover)
-    for u, v in graph.edges():
-        if u not in vertex_cover and v not in vertex_cover:
-            vertex_cover.add(u)
-
-    # Remove redundant vertices from the vertex cover
-    approximate_vertex_cover = set(vertex_cover)
-    for u in vertex_cover:
-        # Check if removing the vertex still results in a valid vertex cover
-        if utils.is_vertex_cover(graph, approximate_vertex_cover - {u}):
-            approximate_vertex_cover.remove(u)
+                approximate_vertex_cover.update(vertex_cover)
 
     return approximate_vertex_cover
 

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.1.1"
+VERSION = "0.1.2"
 
 NAME = "varela"
 
@@ -19,6 +19,7 @@ setuptools.setup(
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
+        "Documentation Research": "https://hal.science/hal-04935775",
     },
     author="Frank Vega",
     author_email="vega.frank@gmail.com",

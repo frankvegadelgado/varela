@@ -2,6 +2,8 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
+This work builds upon [The Unique Games Conjecture](https://hal.science/hal-04935775).
+
 ---
 
 # The Minimum Vertex Cover Problem
@@ -67,101 +69,58 @@ Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solu
 
 ---
 
-# Our Algorithm - Polynomial Runtime
+# Approximate Vertex Cover Algorithm Analysis
 
-## Algorithm Overview
+## Overview
 
-1. **Input**: Adjacency matrix of graph G
-2. **Create Edge Graph**:
-   - Nodes represent edges of G
-   - Connect nodes if edges share a vertex
-3. **Find an Approximate Minimum Maximal Matching** in edge graph
-4. **Extract Vertex Cover**:
-   - Add common vertices from edge cover
-5. **Handle Isolated Edges**:
-   - Add vertices for uncovered edges
-6. **Remove Redundant Vertices**
-7. **Output**: Approximate minimum vertex cover
+This algorithm finds an approximate vertex cover for an undirected graph with an approximation ratio of less than 2. It utilizes the NetworkX library and employs the following key strategies:
 
-Key Features:
-
-- Polynomial-time complexity: $O(|V| |E|)$
-- Approximation ratio: < 2
-- Suitable for large, sparse graphs
-
-## Correctness
-
-1. **Edge Graph Construction**
-
-   - Preserves edge relationships of original graph
-
-2. **Minimum Maximal Matching Approximation**
-
-   - Ensures every edge is incident to an edge in the matching
-
-3. **Vertex Cover Extraction**
-
-   - Guarantees at least one endpoint of each edge is in cover
-
-4. **Isolated Edge Handling**
-
-   - Covers any remaining uncovered edges
-
-5. **Redundancy Removal**
-   - Optimizes cover size while maintaining validity
-
-Correctness Guarantee:
-
-- Every edge in original graph has at least one endpoint in cover
-- Resulting set is a valid, approximate minimum vertex cover
-
-Approximation Quality:
-
-- Achieves < 2 approximation ratio
-- Trade-off between accuracy and polynomial-time efficiency
+1. Processes connected components separately
+2. Handles isolated edges as a special case
+3. Transforms the problem using line graphs
+4. Utilizes minimum edge cover to approximate vertex cover
+5. Optimizes the solution by removing redundant vertices
 
 ## Runtime Analysis
 
-This section analyzes the runtime and space complexity of the given vertex cover approximation algorithm.
+Let $n$ be the number of vertices and $m$ be the number of edges in the graph.
 
-### Time Complexity Breakdown
+1. Finding connected components: $O(n + m)$
+2. For each component:
+   a. Creating line graph: $O(m^2)$
+   b. Finding minimum edge cover: $O(m^3)$
+   c. Converting edge cover to vertex cover: $O(m)$
+   d. Removing redundant vertices: $O(n m)$
 
-1. **Input Processing and Graph Creation:** $O(|E|)$
+Worst-case time complexity: $O(m^2 + m^3 + n m)$
 
-   - $|E|$ represents the number of edges in the input graph.
-   - This step involves converting the sparse matrix representation to a NetworkX graph, which iterates through the non-zero entries (edges).
+The dominant term is typically $O(m^3)$ from finding the minimum edge cover.
 
-2. **Edge Graph Construction:** $O(|E| \Delta)$
+## Correctness
 
-   - $\Delta$ represents the maximum degree of any vertex in the graph.
-   - For each edge in the original graph, we examine its endpoints' neighbors to create corresponding edges in the edge graph. The number of neighbors is bounded by $\Delta$.
+1. **Approximation Guarantee**:
 
-3. **Approximate Minimum Maximal Matching Computation:** $O(|E|\Delta)$
+   - The algorithm leverages the relationship between edge covers in the line graph and vertex covers in the original graph.
+   - A minimum edge cover in the line graph corresponds to a set of edges in the original graph that cover all vertices.
+   - This relationship ensures an approximation ratio of less than 2.
 
-   - This step utilizes the `nx.approximation.min_maximal_matching()` function which computes the minimum maximal matching with an approximation ratio of at most 2. The complexity linearly relates to the number of _edges_ in the edge graph (which is $|E|\Delta$). The complexity is therefore $O(|E|\Delta)$.
+2. **Handling Special Cases**:
 
-4. **Vertex Cover Extraction:** $O(|E|)$
+   - Empty graphs are correctly handled by returning None.
+   - Isolated edges (2-node subgraphs) are treated separately, ensuring correctness for these simple cases.
 
-   - This step iterates through the edges in the computed minimum edge cover, which is bounded by the number of edges in the original graph.
+3. **Connected Components**:
 
-5. **Isolated Edge Handling:** $O(|E|)$
+   - Processing each connected component separately ensures correctness for disconnected graphs without affecting the approximation ratio.
 
-   - We iterate through all edges in the original graph to handle any isolated edges.
+4. **Optimization Step**:
 
-6. **Redundancy Removal:** $O(k |E|)$, or $O(|V| |E|)$ in the worst case.
-   - $k$ is the size of the vertex cover. In the worst-case, the size of the vertex cover can be $O(|V|)$, so the overall time complexity is $O(|V| |E|)$.
-   - For each vertex in the (potentially large) vertex cover, we check if its removal still leaves a valid cover. This check involves examining all edges.
+   - Removing redundant vertices at the end maintains the vertex cover property while potentially improving the approximation.
 
-### Overall Complexity
+5. **Reliance on NetworkX**:
+   - The correctness partly depends on the correct implementation of NetworkX functions, particularly `min_edge_cover`.
 
-- **Time Complexity:** $O(|V| |E|)$ (dominated by the removal redundacy computation).
-- **Space Complexity:** $O(|V| + |E| + |E|\Delta)$. In the worst-case scenario (dense graphs where $E = O(|V|^2)$ and $\Delta = O(|V|)$), this becomes $O(|V|^3)$.
-
-### Key Observations
-
-- This algorithm provides an _approximation_ of the minimum vertex cover, trading accuracy for a polynomial runtime.
-- The practical runtime performance can often be significantly better than the worst-case theoretical bound, especially for sparse graphs.
-- This approach is suitable for sparse and large graphs where computing the _exact_ minimum vertex cover is computationally infeasible.
+While the algorithm provides a valid approximate vertex cover, its practical efficiency may vary depending on the input graph's structure and size. The use of line graphs might lead to increased memory usage for dense graphs.
 
 ---
 
@@ -242,7 +201,7 @@ options:
   -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
-  -v, --verbose         enable verbose output
+  -v, --verbose         anable verbose output
   -l, --log             enable file logging
   --version             show program's version number and exit
 ```
@@ -256,7 +215,7 @@ A command-line utility named `test_approx` is provided for evaluating the Algori
 ```bash
 usage: test_approx [-h] -d DIMENSION [-n NUM_TESTS] [-s SPARSITY] [-a] [-b] [-c] [-w] [-v] [-l] [--version]
 
-The Varela Testing Application.
+The Varela Testing Application using randomly generated, large sparse matrices.
 
 options:
   -h, --help            show this help message and exit
@@ -270,7 +229,7 @@ options:
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -w, --write           write the generated random matrix to a file in the current directory
-  -v, --verbose         enable verbose output
+  -v, --verbose         anable verbose output
   -l, --log             enable file logging
   --version             show program's version number and exit
 ```
@@ -279,7 +238,7 @@ options:
 
 # Batch Execution
 
-Batch execution allows you to solve multiple graphs within a directory simultaneously.
+Batch execution allows you to solve multiple graphs within a directory consecutively.
 
 To view available command-line options for the `batch_approx` command, use the following in your terminal or command prompt:
 
@@ -292,7 +251,8 @@ This will display the following help information:
 ```bash
 usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of < 2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Estimating the Minimum Vertex Cover with an approximation factor of < 2 for all undirected graphs encoded in DIMACS format
+and stored in a directory.
 
 options:
   -h, --help            show this help message and exit
