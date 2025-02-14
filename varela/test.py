@@ -24,7 +24,7 @@ def restricted_float(x):
 def main():
     
     # Define the parameters
-    helper = argparse.ArgumentParser(prog="test_approx", description="The Varela Testing Application.")
+    helper = argparse.ArgumentParser(prog="test_approx", description="The Varela Testing Application using randomly generated, large sparse matrices.")
     helper.add_argument('-d', '--dimension', type=int, help="an integer specifying the dimensions of the square matrices", required=True)
     helper.add_argument('-n', '--num_tests', type=int, default=5, help="an integer specifying the number of tests to run")
     helper.add_argument('-s', '--sparsity', type=restricted_float, default=0.95, help="sparsity of the matrices (0.0 for dense, close to 1.0 for very sparse)")
@@ -34,7 +34,7 @@ def main():
     helper.add_argument('-w', '--write', action='store_true', help='write the generated random matrix to a file in the current directory')
     helper.add_argument('-v', '--verbose', action='store_true', help='anable verbose output')
     helper.add_argument('-l', '--log', action='store_true', help='enable file logging')
-    helper.add_argument('--version', action='version', version='%(prog)s 0.0.7')
+    helper.add_argument('--version', action='version', version='%(prog)s 0.0.8')
     
     # Initialize the parameters
     args = helper.parse_args()
@@ -56,6 +56,7 @@ def main():
         if sparse_matrix is None:
             continue
 
+        graph = utils.sparse_matrix_to_graph(sparse_matrix)    
         logger.info(f"Matrix shape: {sparse_matrix.shape}")
         logger.info(f"Number of non-zero elements: {sparse_matrix.nnz}")
         logger.info(f"Sparsity: {1 - (sparse_matrix.nnz / (sparse_matrix.shape[0] * sparse_matrix.shape[1]))}")
@@ -64,7 +65,7 @@ def main():
             logger.info("An Approximate Solution with an approximation ratio of at most 2 started")
             started = time.time()
             
-            approximate_result = algorithm.find_vertex_cover_approximation(sparse_matrix)
+            approximate_result = algorithm.find_vertex_cover_approximation(graph)
 
             logger.info(f"An Approximate Solution with an approximation ratio of at most 2 done in: {(time.time() - started) * 1000.0} milliseconds")
             
@@ -76,7 +77,7 @@ def main():
             logger.info("A solution with an exponential-time complexity started")
             started = time.time()
             
-            brute_force_result = algorithm.find_vertex_cover_brute_force(sparse_matrix)
+            brute_force_result = algorithm.find_vertex_cover_brute_force(graph)
 
             logger.info(f"A solution with an exponential-time complexity done in: {(time.time() - started) * 1000.0} milliseconds")
             
@@ -88,7 +89,7 @@ def main():
         logger.info("An Approximate Solution with an approximation ratio of at most 3/2 started")
         started = time.time()
         
-        novel_result = algorithm.find_vertex_cover(sparse_matrix)
+        novel_result = algorithm.find_vertex_cover(graph)
 
         logger.info(f"An Approximate Solution with an approximation ratio of at most 3/2 done in: {(time.time() - started) * 1000.0} milliseconds")
 

@@ -4,37 +4,27 @@
 import scipy.sparse as sparse
 import itertools
 import networkx as nx
-import numpy as np
 from . import utils
+from networkx.algorithms.flow import shortest_augmenting_path
 
-def find_vertex_cover(adjacency_matrix):
+
+def find_vertex_cover(graph):
     """
     Computes an approximate vertex cover in polynomial time with an approximation ratio of at most 3/2 for undirected graphs.
 
     Args:
-        adjacency_matrix: A SciPy sparse adjacency matrix.
+        graph: A NetworkX Graph.
 
     Returns:
         A set of vertex indices representing the approximate vertex cover, or None if the graph is empty.
-        Raises ValueError if the input matrix is not square or if the graph is invalid.
-        Raises TypeError if the input is not a sparse matrix.
     """
 
-    # Validate input type
-    if not sparse.issparse(adjacency_matrix):
-        raise TypeError("Input must be a SciPy sparse matrix.")
-
-    # Validate matrix shape
-    n = np.int64(adjacency_matrix.shape[0])
-    if adjacency_matrix.shape[0] != adjacency_matrix.shape[1]:
-        raise ValueError("Adjacency matrix must be square.")
-
     # Handle empty graph
-    if n == 0 or adjacency_matrix.nnz == 0:
+    if graph.number_of_nodes() == 0 or graph.number_of_edges() == 0:
         return None
-
-    # Convert the sparse matrix to a NetworkX graph, avoiding edge duplication in undirected graphs
-    graph = utils.sparse_matrix_to_graph(adjacency_matrix)
+    
+    # Upper bound
+    n = max(graph.nodes()) + 1
 
     # Create an edge graph where each node represents an edge in the original graph
     edge_graph = nx.Graph()
@@ -54,7 +44,7 @@ def find_vertex_cover(adjacency_matrix):
                 edge_graph.add_edge(edge, adjacent_edge)
 
     # Find the minimum edge cover in the edge graph
-    min_edge_cover = nx.min_edge_cover(edge_graph)
+    min_edge_cover = nx.approximation.min_maximal_matching(edge_graph)
 
     # Convert the edge cover back to a vertex cover
     vertex_cover = set()
@@ -77,36 +67,25 @@ def find_vertex_cover(adjacency_matrix):
 
     return approximate_vertex_cover
 
- 
-def find_vertex_cover_brute_force(adj_matrix):
+def find_vertex_cover_brute_force(graph):
     """
-    Calculates the exact minimum vertex cover using brute-force (exponential time).
+    Computes an exact minimum vertex cover in exponential time.
 
     Args:
-        adj_matrix: A SciPy sparse adjacency matrix.
+        graph: A NetworkX Graph.
 
     Returns:
-        A set of vertex indices representing the minimum vertex cover, or None if the graph is empty.
-        Raises ValueError if the input matrix is not square.
-        Raises TypeError if the input is not a sparse matrix.
+        A set of vertex indices representing the exact vertex cover, or None if the graph is empty.
     """
-  
-    if not sparse.issparse(adj_matrix):
-        raise TypeError("Input must be a SciPy sparse matrix.")
-  
-    n_vertices = adj_matrix.shape[0]
-    if adj_matrix.shape[0] != adj_matrix.shape[1]:
-        raise ValueError("Adjacency matrix must be square.")
-  
-    if n_vertices == 0 or adj_matrix.nnz == 0:
-        return None # Handle empty graph
 
-    # Convert the sparse matrix to a NetworkX graph
-    graph = utils.sparse_matrix_to_graph(adj_matrix)
+    if graph.number_of_nodes() == 0 or graph.number_of_edges() == 0:
+        return None
+
+    n_vertices = len(graph.nodes())
 
     for k in range(1, n_vertices + 1): # Iterate through all possible sizes of the cover
-        for cover_candidate in itertools.combinations(range(n_vertices), k):
-            cover_candidate = set(cover_candidate)
+        for candidate in itertools.combinations(graph.nodes(), k):
+            cover_candidate = set(candidate)
             if utils.is_vertex_cover(graph, cover_candidate):
                 return cover_candidate
                 
@@ -114,31 +93,19 @@ def find_vertex_cover_brute_force(adj_matrix):
 
 
 
-def find_vertex_cover_approximation(adj_matrix):
+def find_vertex_cover_approximation(graph):
     """
-    Calculates the approximate vertex cover using an approximation (polynomial time).
+    Computes an approximate vertex cover in polynomial time with an approximation ratio of at most 2 for undirected graphs.
 
     Args:
-        adj_matrix: A SciPy sparse adjacency matrix.
+        graph: A NetworkX Graph.
 
     Returns:
-        A set of vertex indices representing an approximation of the minimum vertex cover, or None if the graph is empty.
-        Raises ValueError if the input matrix is not square.
-        Raises TypeError if the input is not a sparse matrix.
+        A set of vertex indices representing the approximate vertex cover, or None if the graph is empty.
     """
-    
-    if not sparse.issparse(adj_matrix):
-        raise TypeError("Input must be a SciPy sparse matrix.")
-  
-    n_vertices = adj_matrix.shape[0]
-    if adj_matrix.shape[0] != adj_matrix.shape[1]:
-        raise ValueError("Adjacency matrix must be square.")
-  
-    if n_vertices == 0 or adj_matrix.nnz == 0:
-        return None # Handle empty graph
 
-    # Convert the sparse matrix to a NetworkX graph
-    graph = utils.sparse_matrix_to_graph(adj_matrix)
+    if graph.number_of_nodes() == 0 or graph.number_of_edges() == 0:
+        return None
 
     #networkx doesn't have a guaranteed minimum vertex cover function, so we use approximation
     vertex_cover = nx.approximation.vertex_cover.min_weighted_vertex_cover(graph)

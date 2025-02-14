@@ -2,6 +2,7 @@ import lzma
 import bz2
 import numpy as np
 import scipy.sparse as sparse
+import networkx as nx
 
 from . import utils
 
@@ -12,36 +13,24 @@ def create_sparse_matrix_from_file(file):
         file: A file-like object (e.g., an opened file) containing the matrix data.
 
     Returns:
-        A SciPy CSC sparse matrix if the input is valid (symmetric and no 1s on the diagonal).
+        A NetworkX Graph.
 
     Raises:
         ValueError: If the input matrix is not the correct DIMACS format.
     """
-    data = []
-    row_indices = []
-    col_indices = []
-    dimension = 0
-    visited = {}
+    graph = nx.Graph()
     for i, line in enumerate(file):
         line = line.strip()  # Remove newline characters
         if not line.startswith('c') and not line.startswith('p'):
-            edge = [np.int32(node) for node in line.split(' ') if node != 'e']
+            edge = [np.int64(node) for node in line.split(' ') if node != 'e']
             if len(edge) != 2 or min(edge[0], edge[1]) <= 0:
                 raise ValueError(f"The input file is not in the correct DIMACS format at line {i}")
-            elif (edge[0], edge[1]) in visited:
+            elif graph.has_edge(edge[0], edge[1]) or graph.has_edge(edge[1], edge[0]):
                 raise ValueError(f"The input file contains a repeated edge at line {i}")
             else:
-                data.append(np.int8(1))
-                row_indices.append(edge[0]-1)
-                col_indices.append(edge[1]-1)
-                dimension = max(dimension, edge[0], edge[1]) # Update the number of columns if needed.
-                visited[(edge[0], edge[1])], visited[(edge[1], edge[0])] = True, True
-
-    matrix = sparse.csc_matrix((data, (row_indices, col_indices)), shape=(dimension, dimension))
-
-    matrix.setdiag(0)
-
-    return matrix
+                graph.add_edge(edge[0], edge[1])
+    
+    return graph
 
 
 def save_sparse_matrix_to_file(matrix, filename):
@@ -67,7 +56,7 @@ def read(filepath):
         filepath: The path to the file.
 
     Returns:
-        An n x n matrix of ones and zeros
+        A NetworkX Graph.
 
     Raises:
         FileNotFoundError: If the file is not found.

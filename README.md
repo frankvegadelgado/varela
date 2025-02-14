@@ -65,7 +65,7 @@ where the fields W and V specify the endpoints of the edge while the lower-case 
 
 _Example Solution:_
 
-Vertex Cover Found `1, 2, 5`: Nodes `1`, `2`, and `5` constitute an optimal solution.
+Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solution.
 
 ---
 
@@ -77,7 +77,7 @@ Vertex Cover Found `1, 2, 5`: Nodes `1`, `2`, and `5` constitute an optimal solu
 2. **Create Edge Graph**:
    - Nodes represent edges of G
    - Connect nodes if edges share a vertex
-3. **Find Minimum Edge Cover** in edge graph
+3. **Find an Approximate Minimum Maximal Matching** in edge graph
 4. **Extract Vertex Cover**:
    - Add common vertices from edge cover
 5. **Handle Isolated Edges**:
@@ -97,9 +97,9 @@ Key Features:
 
    - Preserves edge relationships of original graph
 
-2. **Minimum Edge Cover**
+2. **Minimum Maximal Matching Approximation**
 
-   - Ensures every edge in edge graph is covered
+   - Ensures every edge is incident to an edge in the matching
 
 3. **Vertex Cover Extraction**
 
@@ -138,9 +138,9 @@ This section analyzes the runtime and space complexity of the given vertex cover
    - $\Delta$ represents the maximum degree of any vertex in the graph.
    - For each edge in the original graph, we examine its endpoints' neighbors to create corresponding edges in the edge graph. The number of neighbors is bounded by $\Delta$.
 
-3. **Minimum Edge Cover Computation:** $O(|E|^3)$
+3. **Approximate Minimum Maximal Matching Computation:** $O(|E|\Delta)$
 
-   - This step utilizes the `nx.min_edge_cover()` function. The complexity relates to the number of _nodes_ in the edge graph (which is $|E|$). The complexity is therefore $O(|E|^3)$.
+   - This step utilizes the `nx.approximation.min_maximal_matching()` function which computes the minimum maximal matching with an approximation ratio of at most 2. The complexity relates to the number of _edges_ in the edge graph (which is $|E|\Delta$). The complexity is therefore $O(|E|\Delta)$.
 
 4. **Vertex Cover Extraction:** $O(|E|)$
 
@@ -156,7 +156,7 @@ This section analyzes the runtime and space complexity of the given vertex cover
 
 ### Overall Complexity
 
-- **Time Complexity:** $O(|E|^3)$ (dominated by the minimum edge cover computation).
+- **Time Complexity:** $O(|E|^2)$ (dominated by the removal redundacy computation).
 - **Space Complexity:** $O(|V| + |E| + |E|\Delta)$. In the worst-case scenario (dense graphs where $E = O(|V|^2)$ and $\Delta = O(|V|)$), this becomes $O(|V|^3)$.
 
 ### Key Observations
@@ -199,10 +199,10 @@ pip install varela
    **Example Output:**
 
    ```
-   testMatrix1: Vertex Cover Found 1, 2, 5
+   testMatrix1: Vertex Cover Found 1, 2, 3
    ```
 
-   This indicates nodes `1, 2, 5` form a vertex cover.
+   This indicates nodes `1, 2, 3` form a vertex cover.
 
 ---
 
@@ -235,7 +235,7 @@ approx -h
 ```bash
 usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded in DIMACS format and stored in a file.
+Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded in DIMACS format.
 
 options:
   -h, --help            show this help message and exit

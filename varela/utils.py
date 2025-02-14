@@ -128,7 +128,7 @@ def string_result_format(result, count_result=False):
     if count_result:
         return f"Vertex Cover Size {len(result)}"
     else:
-        formatted_string = f'{", ".join(f"{x+1}" for x in result)}'
+        formatted_string = f'{", ".join(f"{x}" for x in result)}'
         return f"Vertex Cover Found {formatted_string}"
   else:
      return "Empty Graph"
