@@ -1,11 +1,9 @@
 # Created on 02/05/2025
 # Author: Frank Vega
 
-import scipy.sparse as sparse
 import itertools
 import networkx as nx
 from . import utils
-from networkx.algorithms.flow import shortest_augmenting_path
 
 
 def find_vertex_cover(graph):
@@ -43,12 +41,12 @@ def find_vertex_cover(graph):
                 adjacent_edge = n * b + maximum
                 edge_graph.add_edge(edge, adjacent_edge)
 
-    # Find the minimum edge cover in the edge graph
-    min_edge_cover = nx.approximation.min_maximal_matching(edge_graph)
+    # Find the minimum maximal matching in the edge graph
+    min_maximal_matching = nx.approximation.min_maximal_matching(edge_graph)
 
-    # Convert the edge cover back to a vertex cover
+    # Convert the edge matching back to a vertex cover
     vertex_cover = set()
-    for edge1, edge2 in min_edge_cover:
+    for edge1, edge2 in min_maximal_matching:
         # Extract the common vertex between the two edges
         common_vertex = (edge1 // n) if (edge1 // n) == (edge2 // n) else (edge1 % n)
         vertex_cover.add(common_vertex)
