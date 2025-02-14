@@ -9,6 +9,22 @@ import os
 import networkx as nx
 from itertools import chain, combinations
 
+def get_file_names(directory):
+  """
+  Gets a list of all file names within a specified directory.
+
+  Args:
+    directory: The path to the directory.
+
+  Returns:
+    A list of file names within the directory.
+  """
+  try:
+    return [f for f in os.listdir(directory) if not os.path.isdir(os.path.join(directory, f))]
+  except FileNotFoundError:
+    print(f"Directory '{directory}' not found.")
+    return []
+
 def get_file_name(filepath):
     """
     Gets the file name from an absolute path.
@@ -50,26 +66,6 @@ def has_one_on_diagonal(adjacency_matrix):
     diagonal = adjacency_matrix.diagonal()
     return np.any(diagonal == 1)
 
-def is_symmetric(matrix):
-    """Checks if a SciPy sparse matrix is symmetric.
-
-    Args:
-        matrix: A SciPy sparse matrix.
-
-    Returns:
-        bool: True if the matrix is symmetric, False otherwise.
-        Raises TypeError: if the input is not a sparse matrix.
-    """
-    if not sparse.issparse(matrix):
-        raise TypeError("Input must be a SciPy sparse matrix.")
-
-    rows, cols = matrix.shape
-    if rows != cols:
-        return False  # Non-square matrices cannot be symmetric
-
-    # Efficiently check for symmetry
-    return (matrix != matrix.T).nnz == 0
-
 def generate_short_hash(length=6):
     """Generates a short random alphanumeric hash string.
 
@@ -87,39 +83,6 @@ def generate_short_hash(length=6):
 
     characters = string.ascii_letters + string.digits  # alphanumeric chars
     return ''.join(random.choice(characters) for i in range(length))
-
-def make_symmetric(matrix):
-    """Makes an arbitrary sparse matrix symmetric efficiently.
-
-    Args:
-        matrix: A SciPy sparse matrix (e.g., csc_matrix, csr_matrix, etc.).
-
-    Returns:
-        scipy.sparse.csc_matrix: A symmetric sparse matrix.
-    Raises:
-        TypeError: if the input is not a sparse matrix.
-    """
-
-    if not sparse.issparse(matrix):
-        raise TypeError("Input must be a SciPy sparse matrix.")
-
-    rows, cols = matrix.shape
-    if rows != cols:
-        raise ValueError("Matrix must be square to be made symmetric.")
-
-    # Convert to COO for efficient duplicate handling
-    coo = matrix.tocoo()
-
-    # Concatenate row and column indices, and data with their transposes
-    row_sym = np.concatenate([coo.row, coo.col])
-    col_sym = np.concatenate([coo.col, coo.row])
-    data_sym = np.concatenate([coo.data, coo.data])
-
-    # Create the symmetric matrix in CSC format
-    symmetric_matrix = sparse.csc_matrix((data_sym, (row_sym, col_sym)), shape=(rows, cols))
-    symmetric_matrix.sum_duplicates() #sum the duplicates
-
-    return symmetric_matrix
 
 def random_matrix_tests(matrix_shape, sparsity=0.9):
     """
@@ -146,11 +109,9 @@ def random_matrix_tests(matrix_shape, sparsity=0.9):
 
     sparse_matrix = sparse.csc_matrix((data, (row_indices, col_indices)), shape=(rows, cols))
 
-    symmetric_matrix = make_symmetric(sparse_matrix)  
+    sparse_matrix.setdiag(0)
 
-    symmetric_matrix.setdiag(0)
-
-    return symmetric_matrix
+    return sparse_matrix
 
 def string_result_format(result, count_result=False):
   """
@@ -167,7 +128,7 @@ def string_result_format(result, count_result=False):
     if count_result:
         return f"Vertex Cover Size {len(result)}"
     else:
-        formatted_string = f'{", ".join(f"{x}" for x in result)}'
+        formatted_string = f'{", ".join(f"{x+1}" for x in result)}'
         return f"Vertex Cover Found {formatted_string}"
   else:
      return "Empty Graph"
@@ -178,28 +139,36 @@ def println(output, logger, file_logging=False):
         logger.info(output)
     print(output)
 
-def sparse_matrix_to_edges(adj_matrix, is_directed=False):
+def sparse_matrix_to_graph(adj_matrix, is_directed=False):
     """
-    Converts a SciPy sparse adjacency matrix to a set of edges.
+    Converts a SciPy sparse adjacency matrix to a NetworkX graph.
 
     Args:
         adj_matrix: A SciPy sparse adjacency matrix.
         is_directed: Whether the matrix represents a directed graph (default: False).
 
     Returns:
-        A set of tuples representing the edges.
+        A NetworkX graph.
     """
 
-    edges = set()
+    
     rows, cols = adj_matrix.nonzero()
     if is_directed:
+        graph = nx.DiGraph()
         for i, j in zip(rows, cols):
-            edges.add((np.int64(i), np.int64(j)))
+            u = np.int64(i)
+            v = np.int64(j)
+            if not graph.has_edge(u, v): # Avoid duplicates in undirected graphs
+                graph.add_edge(u, v)
     else:
+        graph = nx.Graph()
         for i, j in zip(rows, cols):
-            if i <= j: # Avoid duplicates in undirected graphs
-                edges.add((np.int64(i), np.int64(j)))
-    return edges
+            u = np.int64(i)
+            v = np.int64(j)
+            if not graph.has_edge(u, v) and not graph.has_edge(v, u): # Avoid duplicates in undirected graphs
+                graph.add_edge(u, v)
+    
+    return graph
 
 def networkx_to_graph_dict(G):
   """

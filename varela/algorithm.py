@@ -33,9 +33,8 @@ def find_vertex_cover(adjacency_matrix):
     if n == 0 or adjacency_matrix.nnz == 0:
         return None
 
-    # Convert the sparse matrix to a NetworkX graph
-    # Avoid duplicates in undirected graphs
-    graph = nx.Graph(utils.sparse_matrix_to_edges(adjacency_matrix))
+    # Convert the sparse matrix to a NetworkX graph, avoiding edge duplication in undirected graphs
+    graph = utils.sparse_matrix_to_graph(adjacency_matrix)
 
     # Create an edge graph where each node represents an edge in the original graph
     edge_graph = nx.Graph()
@@ -103,7 +102,7 @@ def find_vertex_cover_brute_force(adj_matrix):
         return None # Handle empty graph
 
     # Convert the sparse matrix to a NetworkX graph
-    graph = nx.Graph(utils.sparse_matrix_to_edges(adj_matrix))
+    graph = utils.sparse_matrix_to_graph(adj_matrix)
 
     for k in range(1, n_vertices + 1): # Iterate through all possible sizes of the cover
         for cover_candidate in itertools.combinations(range(n_vertices), k):
@@ -139,7 +138,7 @@ def find_vertex_cover_approximation(adj_matrix):
         return None # Handle empty graph
 
     # Convert the sparse matrix to a NetworkX graph
-    graph = nx.Graph(utils.sparse_matrix_to_edges(adj_matrix))
+    graph = utils.sparse_matrix_to_graph(adj_matrix)
 
     #networkx doesn't have a guaranteed minimum vertex cover function, so we use approximation
     vertex_cover = nx.approximation.vertex_cover.min_weighted_vertex_cover(graph)

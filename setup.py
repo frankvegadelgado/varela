@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.0.6"
+VERSION = "0.0.7"
 
 NAME = "varela"
 
@@ -15,7 +15,7 @@ INSTALL_REQUIRES = [
 setuptools.setup(
     name=NAME,
     version=VERSION,
-    description="Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded as a Boolean adjacency matrix stored in a file.",
+    description="Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded in DIMACS format and stored in a file.",
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
@@ -46,7 +46,8 @@ setuptools.setup(
     entry_points={
         'console_scripts': [
             'approx = varela.app:main',
-            'test_approx = varela.test:main'
+            'test_approx = varela.test:main',
+            'batch_approx = varela.batch:main'
         ]
     }
 )

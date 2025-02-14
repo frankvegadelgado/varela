@@ -37,29 +37,35 @@ Answer: Find a Minimum Vertex Cover.
 
 ### Example Instance: 5 x 5 matrix
 
-|        | c0  | c1  | c2  | c3  | c4  |
+|        | c1  | c2  | c3  | c4  | c5  |
 | ------ | --- | --- | --- | --- | --- |
-| **r0** | 0   | 0   | 1   | 0   | 1   |
-| **r1** | 0   | 0   | 0   | 1   | 0   |
-| **r2** | 1   | 0   | 0   | 0   | 1   |
-| **r3** | 0   | 1   | 0   | 0   | 0   |
-| **r4** | 1   | 0   | 1   | 0   | 0   |
+| **r1** | 0   | 0   | 1   | 0   | 1   |
+| **r2** | 0   | 0   | 0   | 1   | 0   |
+| **r3** | 1   | 0   | 0   | 0   | 1   |
+| **r4** | 0   | 1   | 0   | 0   | 0   |
+| **r5** | 1   | 0   | 1   | 0   | 0   |
 
-A matrix is represented in a text file using the following string representation:
+The input for undirected graph is typically provided in [DIMACS](http://dimacs.rutgers.edu/Challenges) format. In this way, the previous adjacency matrix is represented in a text file using the following string representation:
 
 ```
-00101
-00010
-10001
-01000
-10100
+p edge 5 4
+e 1 3
+e 1 5
+e 2 4
+e 3 5
 ```
 
-This represents a 5x5 matrix where each line corresponds to a row, and '1' indicates a connection or presence of an element, while '0' indicates its absence.
+This represents a 5x5 matrix in DIMACS format such that each edge $(v,w)$ appears exactly once in the input file and is not repeated as $(w,v)$. In this format, every edge appears in the form of
+
+```
+e W V
+```
+
+where the fields W and V specify the endpoints of the edge while the lower-case character `e` signifies that this is an edge descriptor line.
 
 _Example Solution:_
 
-Vertex Cover Found `0, 1, 4`: Nodes `0`, `1`, and `4` constitute an optimal solution.
+Vertex Cover Found `1, 2, 5`: Nodes `1`, `2`, and `5` constitute an optimal solution.
 
 ---
 
@@ -185,18 +191,18 @@ pip install varela
 2. Run the script:
 
    ```bash
-   approx -i ./benchmarks/testMatrix1.txt
+   approx -i ./benchmarks/testMatrix1
    ```
 
-   utilizing the `approx` command provided by Varela's Library to execute the Boolean adjacency matrix `varela\benchmarks\testMatrix1.txt`. The file `testMatrix1.txt` represents the example described herein. We also support `.xz`, `.lzma`, `.bz2`, and `.bzip2` compressed `.txt` files.
+   utilizing the `approx` command provided by Varela's Library to execute the Boolean adjacency matrix `varela\benchmarks\testMatrix1`. The file `testMatrix1` represents the example described herein. We also support `.xz`, `.lzma`, `.bz2`, and `.bzip2` compressed text files.
 
    **Example Output:**
 
    ```
-   testMatrix1.txt: Vertex Cover Found 0, 1, 4
+   testMatrix1: Vertex Cover Found 1, 2, 5
    ```
 
-   This indicates nodes `0, 1, 4` form a vertex cover.
+   This indicates nodes `1, 2, 5` form a vertex cover.
 
 ---
 
@@ -205,13 +211,13 @@ pip install varela
 Use the `-c` flag to count the nodes in the vertex cover:
 
 ```bash
-approx -i ./benchmarks/testMatrix2.txt -c
+approx -i ./benchmarks/testMatrix2 -c
 ```
 
 **Output:**
 
 ```
-testMatrix2.txt: Vertex Cover Size 5
+testMatrix2: Vertex Cover Size 5
 ```
 
 ---
@@ -229,7 +235,7 @@ approx -h
 ```bash
 usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded as a Boolean adjacency matrix stored in a file.
+Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded in DIMACS format and stored in a file.
 
 options:
   -h, --help            show this help message and exit
@@ -267,6 +273,37 @@ options:
   -c, --count           calculate the size of the vertex cover
   -w, --write           write the generated random matrix to a file in the current directory
   -v, --verbose         enable verbose output
+  -l, --log             enable file logging
+  --version             show program's version number and exit
+```
+
+---
+
+# Batch Execution
+
+Batch execution allows you to solve multiple graphs within a directory simultaneously.
+
+To view available command-line options for the `batch_approx` command, use the following in your terminal or command prompt:
+
+```bash
+batch_approx -h
+```
+
+This will display the following help information:
+
+```bash
+usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
+
+Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUTDIRECTORY, --inputDirectory INPUTDIRECTORY
+                        Input directory path
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
+  -b, --bruteForce      enable comparison with the exponential-time brute-force approach
+  -c, --count           calculate the size of the vertex cover
+  -v, --verbose         anable verbose output
   -l, --log             enable file logging
   --version             show program's version number and exit
 ```
