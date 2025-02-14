@@ -2,8 +2,6 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [The Unique Games Conjecture](https://www.researchgate.net/publication/388791285_The_Unique_Games_Conjecture).
-
 ---
 
 # The Minimum Vertex Cover Problem
@@ -87,8 +85,8 @@ Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solu
 
 Key Features:
 
-- Polynomial-time complexity: O($|E|^3$)
-- Approximation ratio: ≤ 3/2
+- Polynomial-time complexity: $O(|V| |E|)$
+- Approximation ratio: < 2
 - Suitable for large, sparse graphs
 
 ## Correctness
@@ -119,7 +117,7 @@ Correctness Guarantee:
 
 Approximation Quality:
 
-- Achieves ≤ 3/2 approximation ratio
+- Achieves < 2 approximation ratio
 - Trade-off between accuracy and polynomial-time efficiency
 
 ## Runtime Analysis
@@ -235,7 +233,7 @@ approx -h
 ```bash
 usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded in DIMACS format.
+Estimating the Minimum Vertex Cover with an approximation factor of < 2 for an undirected graph encoded in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
@@ -294,7 +292,7 @@ This will display the following help information:
 ```bash
 usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Estimating the Minimum Vertex Cover with an approximation factor of < 2 for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit

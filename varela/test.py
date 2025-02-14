@@ -34,7 +34,7 @@ def main():
     helper.add_argument('-w', '--write', action='store_true', help='write the generated random matrix to a file in the current directory')
     helper.add_argument('-v', '--verbose', action='store_true', help='anable verbose output')
     helper.add_argument('-l', '--log', action='store_true', help='enable file logging')
-    helper.add_argument('--version', action='version', version='%(prog)s 0.1.0')
+    helper.add_argument('--version', action='version', version='%(prog)s 0.1.1')
     
     # Initialize the parameters
     args = helper.parse_args()
@@ -86,12 +86,12 @@ def main():
             utils.println(output, logger, args.log)
         
 
-        logger.info("An Approximate Solution with an approximation ratio of at most 3/2 started")
+        logger.info("An Approximate Solution with an approximation ratio of less than 2 started")
         started = time.time()
         
         novel_result = algorithm.find_vertex_cover(graph)
 
-        logger.info(f"An Approximate Solution with an approximation ratio of at most 3/2 done in: {(time.time() - started) * 1000.0} milliseconds")
+        logger.info(f"An Approximate Solution with an approximation ratio of less than 2 done in: {(time.time() - started) * 1000.0} milliseconds")
 
         answer = utils.string_result_format(novel_result, count)
         output = f"{i + 1}-Varela Test: {answer}" 

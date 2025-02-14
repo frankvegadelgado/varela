@@ -8,7 +8,7 @@ from . import utils
 
 def find_vertex_cover(graph):
     """
-    Computes an approximate vertex cover in polynomial time with an approximation ratio of at most 3/2 for undirected graphs.
+    Computes an approximate vertex cover in polynomial time with an approximation ratio of less than 2 for undirected graphs.
 
     Args:
         graph: A NetworkX Graph.

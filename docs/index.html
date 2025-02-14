@@ -39,13 +39,6 @@
         alt="Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)"
       />
     </p>
-    <p>
-      This work builds upon
-      <a
-        href="https://www.researchgate.net/publication/388791285_The_Unique_Games_Conjecture"
-        >The Unique Games Conjecture</a
-      >.
-    </p>
     <hr />
     <h1>The Minimum Vertex Cover Problem</h1>
     <p>
@@ -214,8 +207,8 @@ e 3 5
     </ol>
     <p>Key Features:</p>
     <ul>
-      <li>Polynomial-time complexity: O($|E|^3$)</li>
-      <li>Approximation ratio: ≤ 3/2</li>
+      <li>Polynomial-time complexity: $O(|V| |E|)$</li>
+      <li>Approximation ratio: &lt; 2</li>
       <li>Suitable for large, sparse graphs</li>
     </ul>
     <h2>Correctness</h2>
@@ -258,7 +251,7 @@ e 3 5
     </ul>
     <p>Approximation Quality:</p>
     <ul>
-      <li>Achieves ≤ 3/2 approximation ratio</li>
+      <li>Achieves &lt; 2 approximation ratio</li>
       <li>Trade-off between accuracy and polynomial-time efficiency</li>
     </ul>
     <h2>Runtime Analysis</h2>
@@ -423,7 +416,7 @@ cd varela
     <p><strong>Output:</strong></p>
     <pre><code class="language-bash">usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for an undirected graph encoded in DIMACS format.
+Estimating the Minimum Vertex Cover with an approximation factor of &lt; 2 for an undirected graph encoded in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
@@ -479,7 +472,7 @@ options:
     <p>This will display the following help information:</p>
     <pre><code class="language-bash">usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of ≤ 3/2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Estimating the Minimum Vertex Cover with an approximation factor of &lt; 2 for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit
