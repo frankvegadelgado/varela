@@ -276,19 +276,20 @@ def is_vertex_redundant(graph, vertex, vertex_set):
     # Check if the edges covered by the vertex are a subset of the edges covered by the set
     return edges_covered_by_vertex.issubset(edges_covered_by_set)
 
-
-def is_vertex_cover(graph, vertex_set):
+def is_vertex_cover(graph, vertex_cover):
     """
-    Helper function to check if a given set of vertices is a valid vertex cover.
+    Checks if a given set of vertices forms a valid vertex cover for the graph.
 
     Args:
-        graph: A NetworkX graph.
-        vertex_set: A set of vertices.
+        graph (nx.Graph): A NetworkX Graph object.
+        vertex_cover (set): A set of vertices to check.
 
     Returns:
-        True if the set is a vertex cover, False otherwise.
+        bool: True if the set is a valid vertex cover, False otherwise.
     """
+    # Iterate over all edges in the graph
     for u, v in graph.edges():
-        if u not in vertex_set and v not in vertex_set:
+        # If neither endpoint of the edge is in the vertex cover, it's not a valid cover
+        if u not in vertex_cover and v not in vertex_cover:
             return False
     return True

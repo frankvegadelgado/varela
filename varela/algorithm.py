@@ -2,57 +2,69 @@
 # Author: Frank Vega
 
 import itertools
-import networkx as nx
 from . import utils
 
+
+import networkx as nx
 
 def find_vertex_cover(graph):
     """
     Computes an approximate vertex cover in polynomial time with an approximation ratio of less than 2 for undirected graphs.
 
     Args:
-        graph: A NetworkX Graph.
+        graph (nx.Graph): A NetworkX Graph object representing the input graph.
 
     Returns:
-        A set of vertex indices representing the approximate vertex cover, or None if the graph is empty.
+        set: A set of vertex indices representing the approximate vertex cover.
+             Returns None if the graph is empty.
     """
 
     # Handle empty graph
     if graph.number_of_nodes() == 0 or graph.number_of_edges() == 0:
         return None
-    
+
+    # Initialize an empty set to store the approximate vertex cover
     approximate_vertex_cover = set()
+
+    # Iterate over all connected components of the graph
     connected_components = nx.connected_components(graph)
     for connected_component in connected_components:
+        # Create a subgraph for the current connected component
         subgraph = graph.subgraph(connected_component)
-        if subgraph.number_of_edges() > 0:
-            if subgraph.number_of_nodes() == 2:
-                # Include isolated edges
-                for u, _ in subgraph.edges():
-                    approximate_vertex_cover.add(u)
-            else:
-                
-                # Create an edge graph where each node represents an edge in the original graph
-                edge_graph = nx.line_graph(subgraph)                    
-    
-                # Find the minimum edge cover in the edge graph
-                min_edge_cover = nx.min_edge_cover(edge_graph)
 
-                # Convert the edge matching back to a vertex cover
-                candidate_vertex_cover = set()
-                for edge1, edge2 in min_edge_cover:
-                    # Extract the common vertex between the two edges
-                    common_vertex = edge1[0] if edge1[0] == edge2[0] else edge1[1]
-                    candidate_vertex_cover.add(common_vertex)
+        # Skip if the subgraph has no edges
+        if subgraph.number_of_edges() == 0:
+            continue
 
-                # Remove redundant vertices from the vertex cover
-                vertex_cover = set(candidate_vertex_cover)
-                for u in candidate_vertex_cover:
-                    # Check if removing the vertex still results in a valid vertex cover
-                    if utils.is_vertex_cover(subgraph, vertex_cover - {u}):
-                        vertex_cover.remove(u)
+        # Handle isolated edges (subgraphs with exactly 2 nodes)
+        if subgraph.number_of_nodes() == 2:
+            # Add one of the two vertices to the vertex cover
+            for u, _ in subgraph.edges():
+                approximate_vertex_cover.add(u)
+        else:
+            # Create the line graph of the subgraph
+            # In the line graph, each node represents an edge in the original subgraph
+            edge_graph = nx.line_graph(subgraph)
 
-                approximate_vertex_cover.update(vertex_cover)
+            # Find the minimum edge cover in the line graph
+            min_edge_cover = nx.min_edge_cover(edge_graph)
+
+            # Convert the edge cover back to a vertex cover
+            candidate_vertex_cover = set()
+            for edge1, edge2 in min_edge_cover:
+                # Extract the common vertex between the two edges
+                common_vertex = edge1[0] if edge1[0] == edge2[0] else edge1[1]
+                candidate_vertex_cover.add(common_vertex)
+
+            # Remove redundant vertices from the candidate vertex cover
+            vertex_cover = set(candidate_vertex_cover)
+            for u in candidate_vertex_cover:
+                # Check if removing the vertex still results in a valid vertex cover
+                if utils.is_vertex_cover(subgraph, vertex_cover - {u}):
+                    vertex_cover.remove(u)
+
+            # Add the vertices from this connected component to the final vertex cover
+            approximate_vertex_cover.update(vertex_cover)
 
     return approximate_vertex_cover
 
