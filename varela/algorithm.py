@@ -9,7 +9,7 @@ import networkx as nx
 
 def find_vertex_cover(graph):
     """
-    Computes an approximate vertex cover in polynomial time with an approximation ratio of less than sqrt(2) for sufficiently large graphs.
+    Computes an approximate vertex cover in polynomial time with an approximation ratio of at most 3/2 for undirected graphs.
 
     Args:
         graph (nx.Graph): A NetworkX Graph object representing the input graph.

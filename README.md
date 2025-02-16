@@ -73,7 +73,7 @@ Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solu
 
 ## Overview
 
-This algorithm finds an approximate vertex cover for an undirected graph with an approximation ratio of less than √2 for sufficiently large graphs. It utilizes the NetworkX library and employs the following key strategies:
+This algorithm finds an approximate vertex cover for an undirected graph with an approximation ratio of at most 3/2. It utilizes the NetworkX library and employs the following key strategies:
 
 1. Processes connected components separately
 2. Handles isolated edges as a special case
@@ -192,12 +192,43 @@ approx -h
 ```bash
 usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of < √2 for large enough graph encoded in DIMACS format.
+Estimating the Minimum Vertex Cover with an approximation factor of at most 3/2 encoded for undirected graph in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
   -i INPUTFILE, --inputFile INPUTFILE
                         input file path
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
+  -b, --bruteForce      enable comparison with the exponential-time brute-force approach
+  -c, --count           calculate the size of the vertex cover
+  -v, --verbose         anable verbose output
+  -l, --log             enable file logging
+  --version             show program's version number and exit
+```
+
+---
+
+# Batch Execution
+
+Batch execution allows you to solve multiple graphs within a directory consecutively.
+
+To view available command-line options for the `batch_approx` command, use the following in your terminal or command prompt:
+
+```bash
+batch_approx -h
+```
+
+This will display the following help information:
+
+```bash
+usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
+
+Estimating the Minimum Vertex Cover with an approximation factor of at most 3/2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUTDIRECTORY, --inputDirectory INPUTDIRECTORY
+                        Input directory path
   -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
@@ -236,37 +267,6 @@ options:
 
 ---
 
-# Batch Execution
-
-Batch execution allows you to solve multiple graphs within a directory consecutively.
-
-To view available command-line options for the `batch_approx` command, use the following in your terminal or command prompt:
-
-```bash
-batch_approx -h
-```
-
-This will display the following help information:
-
-```bash
-usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
-
-Estimating the Minimum Vertex Cover with an approximation factor of < √2 for all large enough graphs encoded in DIMACS format and stored in a directory.
-
-options:
-  -h, --help            show this help message and exit
-  -i INPUTDIRECTORY, --inputDirectory INPUTDIRECTORY
-                        Input directory path
-  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
-  -b, --bruteForce      enable comparison with the exponential-time brute-force approach
-  -c, --count           calculate the size of the vertex cover
-  -v, --verbose         anable verbose output
-  -l, --log             enable file logging
-  --version             show program's version number and exit
-```
-
----
-
 # Code
 
 - Python implementation by **Frank Vega**.
@@ -276,8 +276,6 @@ options:
 # Complexity
 
 ```diff
-+ We present a polynomial-time algorithm achieving an approximation ratio of less than sqrt(2) for MVC in large enough graphs, providing strong evidence that P = NP by efficiently solving a computationally hard problem with near-optimal solutions.
-
 + This result contradicts the Unique Games Conjecture, suggesting that many optimization problems may admit better solutions, revolutionizing theoretical computer science.
 ```
 
