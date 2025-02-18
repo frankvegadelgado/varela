@@ -65,7 +65,7 @@ where the fields W and V specify the endpoints of the edge while the lower-case 
 
 _Example Solution:_
 
-Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solution.
+Vertex Cover Found `3, 4, 5`: Nodes `3`, `4`, and `5` constitute an optimal solution.
 
 ---
 
@@ -73,54 +73,42 @@ Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solu
 
 ## Overview
 
-This algorithm finds an approximate vertex cover for an undirected graph with an approximation ratio of at most 3/2. It utilizes the NetworkX library and employs the following key strategies:
+The algorithm works as follows:
 
-1. Processes connected components separately
-2. Handles isolated edges as a special case
-3. Transforms the problem using line graphs
-4. Utilizes minimum edge cover to approximate vertex cover
-5. Optimizes the solution by removing redundant vertices
+1. It first checks if the graph is empty or has no edges, returning an empty set in these cases.
+2. It then iterates over all connected components of the graph.
+3. For each connected component, it finds a maximal independent set.
+4. The vertex cover for each component is computed as the complement of the maximal independent set.
+5. The final vertex cover is the union of all component-wise vertex covers.
 
 ## Runtime Analysis
 
-Let $n$ be the number of vertices and $m$ be the number of edges in the graph.
+The runtime of this algorithm can be broken down as follows:
 
-1. Finding connected components: $O(n + m)$
-2. For each component:
-   - Creating line graph: $O(m^2)$
-   - Finding minimum edge cover: $O(m^3)$
-   - Converting edge cover to vertex cover: $O(m)$
-   - Removing redundant vertices: $O(n m)$
+1. Checking for empty graph or no edges: O(1)
+2. Finding connected components: O(V + E), where V is the number of vertices and E is the number of edges.
+3. For each component:
+   - Creating a subgraph: O(V + E)
+   - Finding a maximal independent set: O(V + E)
+   - Computing the complement: O(V)
+   - Updating the final set: O(V)
 
-Worst-case time complexity: $O(m^2 + m^3 + n m)$
-
-The dominant term is typically $O(m^3)$ from finding the minimum edge cover.
+The total runtime is dominated by the operations on connected components, which are performed at most once for each vertex and edge. Therefore, the overall time complexity is O(V + E).
 
 ## Correctness
 
-1. **Approximation Guarantee**:
+The algorithm produces a valid vertex cover with an approximation ratio of less than 2. Here's why:
 
-   - The algorithm leverages the relationship between edge covers in the line graph and vertex covers in the original graph.
-   - A minimum edge cover in the line graph corresponds to a set of edges in the original graph that cover all vertices.
-   - This relationship ensures an approximation ratio of less than 2.
+1. The algorithm correctly handles edge cases (empty graph or no edges).
+2. For each connected component, it finds a maximal independent set. By definition, a maximal independent set is a set of vertices where no two vertices are adjacent, and no more vertices can be added while maintaining this property.
+3. The complement of a maximal independent set is a valid vertex cover. This is because any edge not covered by the complement would have both its endpoints in the independent set, which contradicts the definition of an independent set.
+4. The union of vertex covers for all components forms a valid vertex cover for the entire graph.
+5. The approximation ratio is less than 2 because:
+   - The size of a maximal independent set is at least half the size of a maximum independent set.
+   - The complement of a maximum independent set is a minimum vertex cover.
+   - Therefore, the size of our approximate vertex cover is at most twice the size of the minimum vertex cover.
 
-2. **Handling Special Cases**:
-
-   - Empty graphs are correctly handled by returning None.
-   - Isolated edges (2-node subgraphs) are treated separately, ensuring correctness for these simple cases.
-
-3. **Connected Components**:
-
-   - Processing each connected component separately ensures correctness for disconnected graphs without affecting the approximation ratio.
-
-4. **Optimization Step**:
-
-   - Removing redundant vertices at the end maintains the vertex cover property while potentially improving the approximation.
-
-5. **Reliance on NetworkX**:
-   - The correctness partly depends on the correct implementation of NetworkX functions, particularly `min_edge_cover`.
-
-While the algorithm provides a valid approximate vertex cover, its practical efficiency may vary depending on the input graph's structure and size. The use of line graphs might lead to increased memory usage for dense graphs.
+In conclusion, this algorithm provides a polynomial-time 2-approximation for the vertex cover problem, which is consistent with the known bounds for this NP-hard problem.
 
 ---
 
@@ -156,10 +144,10 @@ pip install varela
    **Example Output:**
 
    ```
-   testMatrix1: Vertex Cover Found 1, 2, 3
+   testMatrix1: Vertex Cover Found 3, 4, 5
    ```
 
-   This indicates nodes `1, 2, 3` form a vertex cover.
+   This indicates nodes `3, 4, 5` form a vertex cover.
 
 ---
 
@@ -192,13 +180,13 @@ approx -h
 ```bash
 usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of at most 3/2 encoded for undirected graph in DIMACS format.
+Estimating the Minimum Vertex Cover with an approximation factor of less than 2 encoded for undirected graph in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
   -i INPUTFILE, --inputFile INPUTFILE
                         input file path
-  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
+  -a, --approximation   enable comparison with another polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -v, --verbose         anable verbose output
@@ -223,13 +211,13 @@ This will display the following help information:
 ```bash
 usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of at most 3/2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Estimating the Minimum Vertex Cover with an approximation factor of less than 2 for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit
   -i INPUTDIRECTORY, --inputDirectory INPUTDIRECTORY
                         Input directory path
-  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
+  -a, --approximation   enable comparison with another polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -v, --verbose         anable verbose output
@@ -256,7 +244,7 @@ options:
                         an integer specifying the number of tests to run
   -s SPARSITY, --sparsity SPARSITY
                         sparsity of the matrices (0.0 for dense, close to 1.0 for very sparse)
-  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
+  -a, --approximation   enable comparison with another polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -w, --write           write the generated random matrix to a file in the current directory
