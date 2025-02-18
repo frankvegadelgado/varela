@@ -85,15 +85,15 @@ The algorithm works as follows:
 
 The runtime of this algorithm can be broken down as follows:
 
-1. Checking for empty graph or no edges: O(1)
-2. Finding connected components: O(V + E), where V is the number of vertices and E is the number of edges.
+1. Checking for empty graph or no edges: $O(1)$
+2. Finding connected components: $O(|V| + |E|)$, where $|V|$ is the number of vertices and $|E|$ is the number of edges.
 3. For each component:
-   - Creating a subgraph: O(V + E)
-   - Finding a maximal independent set: O(V + E)
-   - Computing the complement: O(V)
-   - Updating the final set: O(V)
+   - Creating a subgraph: $O(|V| + |E|)$
+   - Finding a maximal independent set: $O(|V| + |E|)$
+   - Computing the complement: $O(|V|)$
+   - Updating the final set: $O(|V|)$
 
-The total runtime is dominated by the operations on connected components, which are performed at most once for each vertex and edge. Therefore, the overall time complexity is O(V + E).
+The total runtime is dominated by the operations on connected components, which are performed at most once for each vertex and edge. Therefore, the overall time complexity is $O(|V| + |E|)$.
 
 ## Correctness
 

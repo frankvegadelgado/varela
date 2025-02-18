@@ -201,25 +201,25 @@ e 3 5
     <h2>Runtime Analysis</h2>
     <p>The runtime of this algorithm can be broken down as follows:</p>
     <ol>
-      <li>Checking for empty graph or no edges: O(1)</li>
+      <li>Checking for empty graph or no edges: $O(1)$</li>
       <li>
-        Finding connected components: O(V + E), where V is the number of
-        vertices and E is the number of edges.
+        Finding connected components: $O(|V| + |E|)$, where $|V|$ is the number
+        of vertices and $|E|$ is the number of edges.
       </li>
       <li>
         For each component:
         <ul>
-          <li>Creating a subgraph: O(V + E)</li>
-          <li>Finding a maximal independent set: O(V + E)</li>
-          <li>Computing the complement: O(V)</li>
-          <li>Updating the final set: O(V)</li>
+          <li>Creating a subgraph: $O(|V| + |E|)$</li>
+          <li>Finding a maximal independent set: $O(|V| + |E|)$</li>
+          <li>Computing the complement: $O(|V|)$</li>
+          <li>Updating the final set: $O(|V|)$</li>
         </ul>
       </li>
     </ol>
     <p>
       The total runtime is dominated by the operations on connected components,
       which are performed at most once for each vertex and edge. Therefore, the
-      overall time complexity is O(V + E).
+      overall time complexity is $O(|V| + |E|)$.
     </p>
     <h2>Correctness</h2>
     <p>
