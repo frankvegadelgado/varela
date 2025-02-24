@@ -99,7 +99,7 @@ The algorithm's correctness is based on the following principles:
 3. The minimum edge cover ensures that all edges are covered.
 4. König's theorem guarantees that for bipartite graphs, the size of a maximum matching equals the size of a minimum vertex cover.
 5. The algorithm processes each connected component separately, ensuring correctness for disconnected graphs.
-6. A final verification step checks if the computed vertex cover is valid, and if not, it recursively processes the remaining graph.
+6. The algorithm concludes with a verification of the calculated vertex cover. If the cover is invalid, a 2-approximation algorithm is executed on the uncovered portion of the graph.
 
 While this algorithm doesn't guarantee an optimal solution, it provides an approximation with a ratio of less than 2, which is theoretically sound for the vertex cover problem.
 
