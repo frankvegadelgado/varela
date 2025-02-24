@@ -166,93 +166,6 @@ def sparse_matrix_to_graph(adj_matrix, is_directed=False):
     
     return graph
 
-def networkx_to_graph_dict(G):
-  """
-  Converts a NetworkX graph to a dictionary representation.
-
-  Args:
-    G: The NetworkX graph object.
-
-  Returns:
-    A dictionary where keys are vertices and values are lists of adjacent vertices.
-  """
-
-  graph_dict = {}
-  for node in G.nodes:
-    graph_dict[node] = list(G.neighbors(node)) 
-  return graph_dict
-
-
-def powerset(iterable):
-    """
-    Generate all possible subsets of an iterable.
-    """
-    s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
-
-def is_independent_set(G, subset):
-    """
-    Checks if a subset of nodes forms an independent set in the graph.
-    """
-    for u in subset:
-        for v in subset:
-            if u != v and G.has_edge(u, v):
-                return False
-    return True
-
-def is_dominating_set(G, subset):
-    """
-    Checks if a subset of nodes forms a dominating set in the graph.
-    """
-    for node in G.nodes:
-        if node not in subset and not any(G.has_edge(node, neighbor) for neighbor in subset):
-            return False
-    return True
-
-def find_independent_dominating_set_brute_force(adj_matrix):
-    """
-    Finds an independent dominating set in a graph represented by a SciPy sparse adjacency matrix using brute force.
-
-    Args:
-        adj_matrix: SciPy sparse adjacency matrix of the graph.
-
-    Returns:
-        A set of nodes forming an independent dominating set, or None if not found.
-    """
-
-    G = nx.from_scipy_sparse_matrix(adj_matrix)
-    all_subsets = powerset(G.nodes)
-
-    for subset in all_subsets:
-        if is_independent_set(G, subset) and is_dominating_set(G, subset):
-            return subset
-
-    return None
-
-def find_independent_dominating_set(adj_matrix):
-    """
-    Finds an independent dominating set in a graph represented by a SciPy sparse adjacency matrix.
-
-    Args:
-        adj_matrix: SciPy sparse adjacency matrix of the graph.
-
-    Returns:
-        A set of nodes forming an independent dominating set.
-    """
-
-    # Convert adjacency matrix to NetworkX graph
-    G = nx.from_scipy_sparse_matrix(adj_matrix)
-
-    # Find a maximal independent set 
-    # (Note: This is not guaranteed to be minimum)
-    independent_set = nx.maximal_independent_set(G)
-
-    # Check if the independent set is also dominating
-    if nx.is_dominating_set(G, independent_set):
-        return independent_set
-    else:
-        return None
-
 def is_vertex_redundant(graph, vertex, vertex_set):
     """
     Check if a vertex does not cover any edge that a set of vertices does not already cover.
@@ -278,18 +191,16 @@ def is_vertex_redundant(graph, vertex, vertex_set):
 
 def is_vertex_cover(graph, vertex_cover):
     """
-    Checks if a given set of vertices forms a valid vertex cover for the graph.
+    Verifies if a given set of vertices is a valid vertex cover for the graph.
 
     Args:
-        graph (nx.Graph): A NetworkX Graph object.
+        graph (nx.Graph): The input graph.
         vertex_cover (set): A set of vertices to check.
 
     Returns:
         bool: True if the set is a valid vertex cover, False otherwise.
     """
-    # Iterate over all edges in the graph
     for u, v in graph.edges():
-        # If neither endpoint of the edge is in the vertex cover, it's not a valid cover
         if u not in vertex_cover and v not in vertex_cover:
             return False
     return True

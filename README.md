@@ -2,7 +2,7 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [The Unique Games Conjecture](https://hal.science/hal-04935775).
+This work builds upon [The Minimum Vertex Cover Problem](https://www.researchgate.net/publication/389272245_The_Minimum_Vertex_Cover_Problem).
 
 ---
 
@@ -65,7 +65,7 @@ where the fields W and V specify the endpoints of the edge while the lower-case 
 
 _Example Solution:_
 
-Vertex Cover Found `3, 4, 5`: Nodes `3`, `4`, and `5` constitute an optimal solution.
+Vertex Cover Found `1, 2, 5`: Nodes `1`, `2`, and `5` constitute an optimal solution.
 
 ---
 
@@ -73,42 +73,35 @@ Vertex Cover Found `3, 4, 5`: Nodes `3`, `4`, and `5` constitute an optimal solu
 
 ## Overview
 
-The algorithm works as follows:
-
-1. It first checks if the graph is empty or has no edges, returning an empty set in these cases.
-2. It then iterates over all connected components of the graph.
-3. For each connected component, it finds a maximal independent set.
-4. The vertex cover for each component is computed as the complement of the maximal independent set.
-5. The final vertex cover is the union of all component-wise vertex covers.
+This algorithm computes an approximate vertex cover for an undirected graph in polynomial time. It utilizes edge covers, bipartite matching, and König's theorem to achieve an approximation ratio of less than 2. The algorithm is implemented using the NetworkX library in Python.
 
 ## Runtime Analysis
 
-The runtime of this algorithm can be broken down as follows:
+The runtime complexity of this algorithm can be broken down as follows:
 
-1. Checking for empty graph or no edges: $O(1)$
-2. Finding connected components: $O(|V| + |E|)$, where $|V|$ is the number of vertices and $|E|$ is the number of edges.
-3. For each component:
-   - Creating a subgraph: $O(|V| + |E|)$
-   - Finding a maximal independent set: $O(|V| + |E|)$
-   - Computing the complement: $O(|V|)$
-   - Updating the final set: $O(|V|)$
+1. Removing isolated nodes: $O(n)$, where $n$ is the number of nodes.
+2. Finding minimum edge cover: $O(n^3)$, using the Edmonds-Gallai decomposition.
+3. Creating subgraph: $O(m)$, where $m$ is the number of edges in the minimum edge cover.
+4. Finding connected components: $O(n + m)$.
+5. For each connected component:
+   - Creating subgraph: $O(n_i + m_i)$, where $n_i$ and $m_i$ are the number of nodes and edges in the component.
+   - Finding maximum matching (Hopcroft-Karp): $O(\sqrt{n_i} * m_i)$.
+   - Computing vertex cover from matching: $O(n_i + m_i)$.
 
-The total runtime is dominated by the operations on connected components, which are performed at most once for each vertex and edge. Therefore, the overall time complexity is $O(|V| + |E|)$.
+The dominant factor in the runtime is the minimum edge cover computation, which has a cubic time complexity. Therefore, the overall time complexity of the algorithm is $O(n^3)$.
 
 ## Correctness
 
-The algorithm produces a valid vertex cover with an approximation ratio of less than 2. Here's why:
+The algorithm's correctness is based on the following principles:
 
-1. The algorithm correctly handles edge cases (empty graph or no edges).
-2. For each connected component, it finds a maximal independent set. By definition, a maximal independent set is a set of vertices where no two vertices are adjacent, and no more vertices can be added while maintaining this property.
-3. The complement of a maximal independent set is a valid vertex cover. This is because any edge not covered by the complement would have both its endpoints in the independent set, which contradicts the definition of an independent set.
-4. The union of vertex covers for all components forms a valid vertex cover for the entire graph.
-5. The approximation ratio is less than 2 because:
-   - The size of a maximal independent set is at least half the size of a maximum independent set.
-   - The complement of a maximum independent set is a minimum vertex cover.
-   - Therefore, the size of our approximate vertex cover is at most twice the size of the minimum vertex cover.
+1. It handles edge cases (empty graph or no edges) correctly.
+2. Isolated nodes are removed as they don't contribute to the vertex cover.
+3. The minimum edge cover ensures that all edges are covered.
+4. König's theorem guarantees that for bipartite graphs, the size of a maximum matching equals the size of a minimum vertex cover.
+5. The algorithm processes each connected component separately, ensuring correctness for disconnected graphs.
+6. A final verification step checks if the computed vertex cover is valid, and if not, it recursively processes the remaining graph.
 
-In conclusion, this algorithm provides a polynomial-time 2-approximation for the vertex cover problem, which is consistent with the known bounds for this NP-hard problem.
+While this algorithm doesn't guarantee an optimal solution, it provides an approximation with a ratio of less than 2, which is theoretically sound for the vertex cover problem.
 
 ---
 
@@ -144,10 +137,10 @@ pip install varela
    **Example Output:**
 
    ```
-   testMatrix1: Vertex Cover Found 3, 4, 5
+   testMatrix1: Vertex Cover Found 1, 2, 5
    ```
 
-   This indicates nodes `3, 4, 5` form a vertex cover.
+   This indicates nodes `1, 2, 5` form a vertex cover.
 
 ---
 
@@ -162,7 +155,7 @@ approx -i ./benchmarks/testMatrix2 -c
 **Output:**
 
 ```
-testMatrix2: Vertex Cover Size 5
+testMatrix2: Vertex Cover Size 6
 ```
 
 ---

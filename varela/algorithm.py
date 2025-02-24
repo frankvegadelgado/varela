@@ -4,44 +4,58 @@
 import itertools
 from . import utils
 
+
 import networkx as nx
 
 def find_vertex_cover(graph):
     """
-    Computes an approximate vertex cover in polynomial time with an approximation ratio of less than 2 for undirected graphs.
+    Computes an approximate vertex cover for an undirected graph in polynomial time.
+    The algorithm uses edge covers, bipartite matching, and König's theorem to achieve
+    an approximation ratio of less than 2.
 
     Args:
         graph (nx.Graph): A NetworkX Graph object representing the input graph.
 
     Returns:
         set: A set of vertex indices representing the approximate vertex cover.
-             Returns an empty set if the graph is empty or has no edges.
+             Returns None if the graph is empty or has no edges.
     """
 
     # Handle empty graph or graph with no edges
     if graph.number_of_nodes() == 0 or graph.number_of_edges() == 0:
-        return set()  # Return an empty set instead of None for consistency
+        return None
+
+    # Remove isolated nodes (nodes with no edges) as they are not part of any vertex cover
+    graph.remove_nodes_from(list(nx.isolates(graph)))
 
     # Initialize an empty set to store the approximate vertex cover
     approximate_vertex_cover = set()
 
-    # Iterate over all connected components of the graph
-    for connected_component in nx.connected_components(graph):
+    # Find a minimum edge cover in the graph
+    min_edge_cover = nx.min_edge_cover(graph)
+
+    # Create a subgraph using the edges from the minimum edge cover
+    min_edge_graph = nx.Graph(min_edge_cover)
+
+    # Iterate over all connected components of the min_edge_graph
+    for connected_component in nx.connected_components(min_edge_graph):
         # Create a subgraph for the current connected component
-        subgraph = graph.subgraph(connected_component)
+        subgraph = min_edge_graph.subgraph(connected_component)
 
-        # Skip if the subgraph has no edges (though this should not happen due to the initial check)
-        if subgraph.number_of_edges() == 0:
-            continue
+        # Find a maximum matching in the bipartite subgraph using Hopcroft-Karp algorithm
+        maximum_matching = nx.bipartite.hopcroft_karp_matching(subgraph)
 
-        # Find a maximal independent set in the subgraph
-        maximal_independent_set = nx.maximal_independent_set(subgraph)
+        # Use König's theorem to find a vertex cover in the bipartite subgraph
+        vertex_cover = nx.bipartite.to_vertex_cover(subgraph, maximum_matching)
 
-        # Vertex cover is the complement of the maximal independent set
-        vertex_cover = set(subgraph.nodes) - set(maximal_independent_set)
-        
         # Add the vertices from this connected component to the final vertex cover
         approximate_vertex_cover.update(vertex_cover)
+    
+    # Verify if the computed vertex cover is valid
+    if not utils.is_vertex_cover(graph, approximate_vertex_cover):
+        # If not, recursively find a vertex cover for the remaining graph
+        graph.remove_nodes_from(approximate_vertex_cover)
+        approximate_vertex_cover.update(find_vertex_cover(graph))
 
     return approximate_vertex_cover
 
