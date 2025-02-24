@@ -65,7 +65,7 @@ where the fields W and V specify the endpoints of the edge while the lower-case 
 
 _Example Solution:_
 
-Vertex Cover Found `1, 2, 5`: Nodes `1`, `2`, and `5` constitute an optimal solution.
+Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solution.
 
 ---
 
@@ -137,10 +137,10 @@ pip install varela
    **Example Output:**
 
    ```
-   testMatrix1: Vertex Cover Found 1, 2, 5
+   testMatrix1: Vertex Cover Found 1, 2, 3
    ```
 
-   This indicates nodes `1, 2, 5` form a vertex cover.
+   This indicates nodes `1, 2, 3` form a vertex cover.
 
 ---
 
@@ -155,7 +155,7 @@ approx -i ./benchmarks/testMatrix2 -c
 **Output:**
 
 ```
-testMatrix2: Vertex Cover Size 6
+testMatrix2: Vertex Cover Size 7
 ```
 
 ---

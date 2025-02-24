@@ -53,9 +53,12 @@ def find_vertex_cover(graph):
     
     # Verify if the computed vertex cover is valid
     if not utils.is_vertex_cover(graph, approximate_vertex_cover):
-        # If not, recursively find a vertex cover for the remaining graph
+        # Delete selected and isolated nodes
         graph.remove_nodes_from(approximate_vertex_cover)
-        approximate_vertex_cover.update(find_vertex_cover(graph))
+        graph.remove_nodes_from(list(nx.isolates(graph)))
+        # Compute approximate vertex cover (2-approximation)
+        residual_vertex_cover = nx.approximation.vertex_cover.min_weighted_vertex_cover(graph)
+        approximate_vertex_cover.update(residual_vertex_cover)
 
     return approximate_vertex_cover
 
