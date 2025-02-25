@@ -55,12 +55,12 @@ def approximate_solution(inputFile, verbose=False, log=False, count=False, brute
         output = f"{filename}: (Brute Force) {answer}"
         utils.println(output, logger, log)
         
-    logger.info("Our Solution with an approximation ratio of less than 2 started")
+    logger.info("Our Solution with an approximation ratio of at most 1.9 started")
     started = time.time()
     
     novel_result = algorithm.find_vertex_cover(graph)
 
-    logger.info(f"Our Solution with an approximation ratio of less than 2 done in: {(time.time() - started) * 1000.0} milliseconds")
+    logger.info(f"Our Solution with an approximation ratio of at most 1.9 done in: {(time.time() - started) * 1000.0} milliseconds")
 
     answer = utils.string_result_format(novel_result, count)
     output = f"{filename}: {answer}"
@@ -75,14 +75,14 @@ def approximate_solution(inputFile, verbose=False, log=False, count=False, brute
 def main():
     
     # Define the parameters
-    helper = argparse.ArgumentParser(prog="approx", description='Estimating the Minimum Vertex Cover with an approximation factor of less than 2 for undirected graph encoded in DIMACS format.')
+    helper = argparse.ArgumentParser(prog="approx", description='Estimating the Minimum Vertex Cover with an approximation factor of at most 1.9 for undirected graph encoded in DIMACS format.')
     helper.add_argument('-i', '--inputFile', type=str, help='input file path', required=True)
     helper.add_argument('-a', '--approximation', action='store_true', help='enable comparison with another polynomial-time approximation approach within a factor of at most 2')
     helper.add_argument('-b', '--bruteForce', action='store_true', help='enable comparison with the exponential-time brute-force approach')
     helper.add_argument('-c', '--count', action='store_true', help='calculate the size of the vertex cover')
     helper.add_argument('-v', '--verbose', action='store_true', help='anable verbose output')
     helper.add_argument('-l', '--log', action='store_true', help='enable file logging')
-    helper.add_argument('--version', action='version', version='%(prog)s 0.1.9')
+    helper.add_argument('--version', action='version', version='%(prog)s 0.2.0')
     
     # Initialize the parameters
     args = helper.parse_args()
