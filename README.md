@@ -2,7 +2,7 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [The Unique Games Conjecture](https://hal.science/hal-04935775).
+This work builds upon [The Unique Games Conjecture](https://www.researchgate.net/publication/389320261_The_Unique_Games_Conjecture).
 
 ---
 
