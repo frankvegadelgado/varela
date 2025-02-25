@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.1.8"
+VERSION = "0.1.9"
 
 NAME = "varela"
 
@@ -19,7 +19,7 @@ setuptools.setup(
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
-        "Documentation Research": "https://www.researchgate.net/publication/389272245_The_Minimum_Vertex_Cover_Problem",
+        "Documentation Research": "https://hal.science/hal-04964834",
     },
     author="Frank Vega",
     author_email="vega.frank@gmail.com",

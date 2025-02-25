@@ -2,7 +2,7 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [The Minimum Vertex Cover Problem](https://www.researchgate.net/publication/389272245_The_Minimum_Vertex_Cover_Problem).
+This work builds upon [The Minimum Vertex Cover Problem](https://hal.science/hal-04964834).
 
 ---
 

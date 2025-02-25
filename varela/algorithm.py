@@ -10,7 +10,7 @@ import networkx as nx
 def find_vertex_cover(graph):
     """
     Computes an approximate vertex cover for an undirected graph in polynomial time.
-    The algorithm uses edge covers, bipartite matching, and König's theorem to achieve
+    The algorithm uses edge covers, bipartite matching, and Konig's theorem to achieve
     an approximation ratio of less than 2.
 
     Args:
@@ -45,7 +45,7 @@ def find_vertex_cover(graph):
         # Find a maximum matching in the bipartite subgraph using Hopcroft-Karp algorithm
         maximum_matching = nx.bipartite.hopcroft_karp_matching(subgraph)
 
-        # Use König's theorem to find a vertex cover in the bipartite subgraph
+        # Use Konig's theorem to find a vertex cover in the bipartite subgraph
         vertex_cover = nx.bipartite.to_vertex_cover(subgraph, maximum_matching)
 
         # Add the vertices from this connected component to the final vertex cover
