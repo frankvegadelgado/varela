@@ -11,7 +11,7 @@ def find_vertex_cover(graph):
     """
     Computes an approximate vertex cover for an undirected graph in polynomial time.
     The algorithm uses edge covers, bipartite matching, and Konig's theorem to achieve
-    an approximation ratio of at most 1.9.
+    an approximation ratio of less than 2.
 
     Args:
         graph (nx.Graph): A NetworkX Graph object representing the input graph.

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 
 NAME = "varela"
 
@@ -15,11 +15,11 @@ INSTALL_REQUIRES = [
 setuptools.setup(
     name=NAME,
     version=VERSION,
-    description="Estimating the Minimum Vertex Cover with an approximation factor of at most 1.9 for undirected graph encoded in DIMACS format.",
+    description="Estimating the Minimum Vertex Cover with an approximation factor of less than 2 for undirected graph encoded in DIMACS format.",
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
-        "Documentation Research": "https://hal.science/hal-04935775",
+        "Documentation Research": "https://www.researchgate.net/publication/389326369_New_Insights_and_Developments_on_the_Unique_Games_Conjecture",
     },
     author="Frank Vega",
     author_email="vega.frank@gmail.com",
