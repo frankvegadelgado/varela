@@ -73,7 +73,7 @@ Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solu
 
 ## Overview
 
-This algorithm computes an approximate vertex cover for an undirected graph in polynomial time. It utilizes edge covers, bipartite matching, and König's theorem to achieve an approximation ratio of less than 2. The algorithm is implemented using the NetworkX library in Python.
+This algorithm computes an approximate vertex cover for an undirected graph in polynomial time. It utilizes edge covers, bipartite matching, and König's theorem to achieve an approximation ratio of at most 1.75. The algorithm is implemented using the NetworkX library in Python.
 
 ## Runtime Analysis
 
@@ -101,7 +101,7 @@ The algorithm's correctness is based on the following principles:
 5. The algorithm processes each connected component separately, ensuring correctness for disconnected graphs.
 6. The algorithm concludes with a verification of the calculated vertex cover. If the cover is invalid, a 2-approximation algorithm is executed on the uncovered portion of the graph.
 
-While this algorithm doesn't guarantee an optimal solution, it provides an approximation with a ratio of less than 2, which is theoretically sound for the vertex cover problem.
+While this algorithm doesn't guarantee an optimal solution, it provides an approximation with a ratio of at most 1.75, which is theoretically sound for the vertex cover problem.
 
 ---
 
@@ -173,7 +173,7 @@ approx -h
 ```bash
 usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of less than 2 encoded for undirected graph in DIMACS format.
+Estimating the Minimum Vertex Cover with an approximation factor of at most 1.75 encoded for undirected graph in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
@@ -204,7 +204,7 @@ This will display the following help information:
 ```bash
 usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of less than 2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Estimating the Minimum Vertex Cover with an approximation factor of at most 1.75 for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit

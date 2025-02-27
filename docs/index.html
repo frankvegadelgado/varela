@@ -187,7 +187,7 @@ e 3 5
     <p>
       This algorithm computes an approximate vertex cover for an undirected
       graph in polynomial time. It utilizes edge covers, bipartite matching, and
-      König's theorem to achieve an approximation ratio of less than 2. The
+      König's theorem to achieve an approximation ratio of at most 1.75. The
       algorithm is implemented using the NetworkX library in Python.
     </p>
     <h2>Runtime Analysis</h2>
@@ -250,7 +250,7 @@ e 3 5
     </ol>
     <p>
       While this algorithm doesn't guarantee an optimal solution, it provides an
-      approximation with a ratio of less than 2, which is theoretically sound
+      approximation with a ratio of at most 1.75, which is theoretically sound
       for the vertex cover problem.
     </p>
     <hr />
@@ -304,7 +304,7 @@ cd varela
     <p><strong>Output:</strong></p>
     <pre><code class="language-bash">usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of less than 2 encoded for undirected graph in DIMACS format.
+Estimating the Minimum Vertex Cover with an approximation factor of at most 1.75 encoded for undirected graph in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
@@ -333,7 +333,7 @@ options:
     <p>This will display the following help information:</p>
     <pre><code class="language-bash">usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of less than 2 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Estimating the Minimum Vertex Cover with an approximation factor of at most 1.75 for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit
