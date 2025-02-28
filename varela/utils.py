@@ -84,6 +84,39 @@ def generate_short_hash(length=6):
     characters = string.ascii_letters + string.digits  # alphanumeric chars
     return ''.join(random.choice(characters) for i in range(length))
 
+def make_symmetric(matrix):
+    """Makes an arbitrary sparse matrix symmetric efficiently.
+
+    Args:
+        matrix: A SciPy sparse matrix (e.g., csc_matrix, csr_matrix, etc.).
+
+    Returns:
+        scipy.sparse.csc_matrix: A symmetric sparse matrix.
+    Raises:
+        TypeError: if the input is not a sparse matrix.
+    """
+
+    if not sparse.issparse(matrix):
+        raise TypeError("Input must be a SciPy sparse matrix.")
+
+    rows, cols = matrix.shape
+    if rows != cols:
+        raise ValueError("Matrix must be square to be made symmetric.")
+
+    # Convert to COO for efficient duplicate handling
+    coo = matrix.tocoo()
+
+    # Concatenate row and column indices, and data with their transposes
+    row_sym = np.concatenate([coo.row, coo.col])
+    col_sym = np.concatenate([coo.col, coo.row])
+    data_sym = np.concatenate([coo.data, coo.data])
+
+    # Create the symmetric matrix in CSC format
+    symmetric_matrix = sparse.csc_matrix((data_sym, (row_sym, col_sym)), shape=(rows, cols))
+    symmetric_matrix.sum_duplicates() #sum the duplicates
+
+    return symmetric_matrix
+
 def random_matrix_tests(matrix_shape, sparsity=0.9):
     """
     Performs random tests on a sparse matrix.
@@ -103,15 +136,19 @@ def random_matrix_tests(matrix_shape, sparsity=0.9):
 
     # Generate a sparse matrix using random indices and data
     num_elements = int(size * (1 - sparsity))  # Number of non-zero elements
-    row_indices = np.random.randint(0, rows, size=num_elements)
-    col_indices = np.random.randint(0, cols, size=num_elements)
+    row_indices = np.random.randint(0, rows, size=num_elements, dtype=np.int32)
+    col_indices = np.random.randint(0, cols, size=num_elements, dtype=np.int32)
     data = np.ones(num_elements, dtype=np.int8)
 
     sparse_matrix = sparse.csc_matrix((data, (row_indices, col_indices)), shape=(rows, cols))
 
-    sparse_matrix.setdiag(0)
+    # Convert sparse_matrix to a symmetric matrix
+    symmetric_matrix = make_symmetric(sparse_matrix)  
 
-    return sparse_matrix
+    # Set diagonal to 0
+    symmetric_matrix.setdiag(0)
+
+    return symmetric_matrix
 
 def string_result_format(result, count_result=False):
   """

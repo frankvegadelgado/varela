@@ -32,7 +32,6 @@ def create_sparse_matrix_from_file(file):
     
     return graph
 
-
 def save_sparse_matrix_to_file(matrix, filename):
     """
     Writes a SciPy sparse matrix to a DIMACS format.
@@ -44,9 +43,10 @@ def save_sparse_matrix_to_file(matrix, filename):
     rows, cols = matrix.nonzero()
     
     with open(filename, 'w') as f:
-        f.write(f"p edge {matrix.shape[0]} {matrix.nnz}" + "\n")
+        f.write(f"p edge {matrix.shape[0]} {matrix.nnz // 2 - matrix.shape[0]//2}" + "\n")
         for i, j in zip(rows, cols):
-            f.write(f"e {i + 1} {j + 1}" + "\n")
+            if i < j:
+                f.write(f"e {i + 1} {j + 1}" + "\n")
     
 
 def read(filepath):
