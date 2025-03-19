@@ -2,24 +2,25 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.2.4"
+VERSION = "0.2.5"
 
 NAME = "varela"
 
 INSTALL_REQUIRES = [
     "numpy>=2.2.1",
     "scipy>=1.15.0",
-    "networkx[default]>=3.4.2"
+    "networkx[default]>=3.4.2",
+    "ortools>=9.12.4544" 
 ]
 
 setuptools.setup(
     name=NAME,
     version=VERSION,
-    description="Estimating the Minimum Vertex Cover with an approximation factor of at most 1.75 for undirected graph encoded in DIMACS format.",
+    description="Compute the Exact Minimum Vertex Cover for undirected graph encoded in DIMACS format.",
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
-        "Documentation Research": "https://www.researchgate.net/publication/389326369_New_Insights_and_Developments_on_the_Unique_Games_Conjecture",
+        "Documentation Research": "https://dev.to/frank_vega_987689489099bf/polynomial-time-algorithm-for-mvc-p-np-28n6",
     },
     author="Frank Vega",
     author_email="vega.frank@gmail.com",
@@ -45,9 +46,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     entry_points={
         'console_scripts': [
-            'approx = varela.app:main',
-            'test_approx = varela.test:main',
-            'batch_approx = varela.batch:main'
+            'cover = varela.app:main',
+            'test_cover = varela.test:main',
+            'batch_cover = varela.batch:main'
         ]
     }
 )

@@ -2,7 +2,7 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [New Insights and Developments on the Unique Games Conjecture](https://www.researchgate.net/publication/389326369_New_Insights_and_Developments_on_the_Unique_Games_Conjecture).
+This work builds upon [Polynomial-Time Algorithm for MVC (P = NP)](https://dev.to/frank_vega_987689489099bf/polynomial-time-algorithm-for-mvc-p-np-28n6).
 
 ---
 
@@ -65,43 +65,7 @@ where the fields W and V specify the endpoints of the edge while the lower-case 
 
 _Example Solution:_
 
-Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solution.
-
----
-
-# Approximate Vertex Cover Algorithm Analysis
-
-## Overview
-
-This algorithm computes an approximate vertex cover for an undirected graph in polynomial time. It utilizes edge covers, bipartite matching, and König's theorem to achieve an approximation ratio of at most 1.75. The algorithm is implemented using the NetworkX library in Python.
-
-## Runtime Analysis
-
-The runtime complexity of this algorithm can be broken down as follows:
-
-1. Removing isolated nodes: $O(n)$, where $n$ is the number of nodes.
-2. Finding minimum edge cover: $O(n^3)$, using the Edmonds-Gallai decomposition.
-3. Creating subgraph: $O(m)$, where $m$ is the number of edges in the minimum edge cover.
-4. Finding connected components: $O(n + m)$.
-5. For each connected component:
-   - Creating subgraph: $O(n_i + m_i)$, where $n_i$ and $m_i$ are the number of nodes and edges in the component.
-   - Finding maximum matching (Hopcroft-Karp): $O(\sqrt{n_i} * m_i)$.
-   - Computing vertex cover from matching: $O(n_i + m_i)$.
-
-The dominant factor in the runtime is the minimum edge cover computation, which has a cubic time complexity. Therefore, the overall time complexity of the algorithm is $O(n^3)$.
-
-## Correctness
-
-The algorithm's correctness is based on the following principles:
-
-1. It handles edge cases (empty graph or no edges) correctly.
-2. Isolated nodes are removed as they don't contribute to the vertex cover.
-3. The minimum edge cover ensures that all edges are covered.
-4. König's theorem guarantees that for bipartite graphs, the size of a maximum matching equals the size of a minimum vertex cover.
-5. The algorithm processes each connected component separately, ensuring correctness for disconnected graphs.
-6. The algorithm concludes with a verification of the calculated vertex cover. If the cover is invalid, a 2-approximation algorithm is executed on the uncovered portion of the graph.
-
-While this algorithm doesn't guarantee an optimal solution, it provides an approximation with a ratio of at most 1.75, which is theoretically sound for the vertex cover problem.
+Vertex Cover Found `2, 3, 5`: Nodes `2`, `3`, and `5` constitute an optimal solution.
 
 ---
 
@@ -129,18 +93,18 @@ pip install varela
 2. Run the script:
 
    ```bash
-   approx -i ./benchmarks/testMatrix1
+   cover -i ./benchmarks/testMatrix1
    ```
 
-   utilizing the `approx` command provided by Varela's Library to execute the Boolean adjacency matrix `varela\benchmarks\testMatrix1`. The file `testMatrix1` represents the example described herein. We also support `.xz`, `.lzma`, `.bz2`, and `.bzip2` compressed text files.
+   utilizing the `cover` command provided by Varela's Library to execute the Boolean adjacency matrix `varela\benchmarks\testMatrix1`. The file `testMatrix1` represents the example described herein. We also support `.xz`, `.lzma`, `.bz2`, and `.bzip2` compressed text files.
 
    **Example Output:**
 
    ```
-   testMatrix1: Vertex Cover Found 1, 2, 3
+   testMatrix1: Vertex Cover Found 2, 3, 5
    ```
 
-   This indicates nodes `1, 2, 3` form a vertex cover.
+   This indicates nodes `2, 3, 5` form a vertex cover.
 
 ---
 
@@ -149,13 +113,13 @@ pip install varela
 Use the `-c` flag to count the nodes in the vertex cover:
 
 ```bash
-approx -i ./benchmarks/testMatrix2 -c
+cover -i ./benchmarks/testMatrix2 -c
 ```
 
 **Output:**
 
 ```
-testMatrix2: Vertex Cover Size 7
+testMatrix2: Vertex Cover Size 5
 ```
 
 ---
@@ -165,21 +129,21 @@ testMatrix2: Vertex Cover Size 7
 Display help and options:
 
 ```bash
-approx -h
+cover -h
 ```
 
 **Output:**
 
 ```bash
-usage: approx [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
+usage: cover [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of at most 1.75 encoded for undirected graph in DIMACS format.
+Compute the Exact Minimum Vertex Cover for undirected graph encoded in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
   -i INPUTFILE, --inputFile INPUTFILE
                         input file path
-  -a, --approximation   enable comparison with another polynomial-time approximation approach within a factor of at most 2
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -v, --verbose         anable verbose output
@@ -193,24 +157,24 @@ options:
 
 Batch execution allows you to solve multiple graphs within a directory consecutively.
 
-To view available command-line options for the `batch_approx` command, use the following in your terminal or command prompt:
+To view available command-line options for the `batch_cover` command, use the following in your terminal or command prompt:
 
 ```bash
-batch_approx -h
+batch_cover -h
 ```
 
 This will display the following help information:
 
 ```bash
-usage: batch_approx [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
+usage: batch_cover [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Estimating the Minimum Vertex Cover with an approximation factor of at most 1.75 for all undirected graphs encoded in DIMACS format and stored in a directory.
+Compute the Exact Minimum Vertex Cover for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit
   -i INPUTDIRECTORY, --inputDirectory INPUTDIRECTORY
                         Input directory path
-  -a, --approximation   enable comparison with another polynomial-time approximation approach within a factor of at most 2
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -v, --verbose         anable verbose output
@@ -222,10 +186,10 @@ options:
 
 # Testing Application
 
-A command-line utility named `test_approx` is provided for evaluating the Algorithm using randomly generated, large sparse matrices. It supports the following options:
+A command-line utility named `test_cover` is provided for evaluating the Algorithm using randomly generated, large sparse matrices. It supports the following options:
 
 ```bash
-usage: test_approx [-h] -d DIMENSION [-n NUM_TESTS] [-s SPARSITY] [-a] [-b] [-c] [-w] [-v] [-l] [--version]
+usage: test_cover [-h] -d DIMENSION [-n NUM_TESTS] [-s SPARSITY] [-a] [-b] [-c] [-w] [-v] [-l] [--version]
 
 The Varela Testing Application using randomly generated, large sparse matrices.
 
@@ -237,7 +201,7 @@ options:
                         an integer specifying the number of tests to run
   -s SPARSITY, --sparsity SPARSITY
                         sparsity of the matrices (0.0 for dense, close to 1.0 for very sparse)
-  -a, --approximation   enable comparison with another polynomial-time approximation approach within a factor of at most 2
+  -a, --approximation   enable comparison with a polynomial-time approximation approach within a factor of at most 2
   -b, --bruteForce      enable comparison with the exponential-time brute-force approach
   -c, --count           calculate the size of the vertex cover
   -w, --write           write the generated random matrix to a file in the current directory
@@ -251,14 +215,6 @@ options:
 # Code
 
 - Python implementation by **Frank Vega**.
-
----
-
-# Complexity
-
-```diff
-+ This result contradicts the Unique Games Conjecture, suggesting that many optimization problems may admit better solutions, revolutionizing theoretical computer science.
-```
 
 ---
 

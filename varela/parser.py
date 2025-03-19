@@ -25,10 +25,10 @@ def create_sparse_matrix_from_file(file):
             edge = [np.int32(node) for node in line.split(' ') if node != 'e']
             if len(edge) != 2 or min(edge[0], edge[1]) <= 0:
                 raise ValueError(f"The input file is not in the correct DIMACS format at line {i}")
-            elif graph.has_edge(edge[0], edge[1]) or graph.has_edge(edge[1], edge[0]):
+            elif graph.has_edge(edge[0] - 1, edge[1] - 1):
                 raise ValueError(f"The input file contains a repeated edge at line {i}")
             else:
-                graph.add_edge(edge[0], edge[1])
+                graph.add_edge(edge[0] - 1, edge[1] - 1)
     
     return graph
 

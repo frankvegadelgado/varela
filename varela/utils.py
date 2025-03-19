@@ -7,7 +7,6 @@ import random
 import string
 import os
 import networkx as nx
-from itertools import chain, combinations
 
 def get_file_names(directory):
   """
@@ -165,7 +164,7 @@ def string_result_format(result, count_result=False):
     if count_result:
         return f"Vertex Cover Size {len(result)}"
     else:
-        formatted_string = f'{", ".join(f"{x}" for x in result)}'
+        formatted_string = f'{", ".join(f"{x + 1}" for x in result)}'
         return f"Vertex Cover Found {formatted_string}"
   else:
      return "Empty Graph"
@@ -198,7 +197,7 @@ def sparse_matrix_to_graph(adj_matrix, is_directed=False):
     else:
         graph = nx.Graph()
         for i, j in zip(rows, cols):
-            if not graph.has_edge(i, j) and not graph.has_edge(j, i): # Avoid duplicates in undirected graphs
+            if i < j: # Avoid duplicates in undirected graphs
                 graph.add_edge(i, j)
     
     return graph

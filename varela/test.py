@@ -4,7 +4,7 @@
 import time
 import argparse
 import math
-
+import networkx as nx
 
 from . import algorithm
 from . import applogger
@@ -24,17 +24,17 @@ def restricted_float(x):
 def main():
     
     # Define the parameters
-    helper = argparse.ArgumentParser(prog="test_approx", description="The Varela Testing Application using randomly generated, large sparse matrices.")
+    helper = argparse.ArgumentParser(prog="test_cover", description="The Varela Testing Application using randomly generated, large sparse matrices.")
     helper.add_argument('-d', '--dimension', type=int, help="an integer specifying the dimensions of the square matrices", required=True)
     helper.add_argument('-n', '--num_tests', type=int, default=5, help="an integer specifying the number of tests to run")
     helper.add_argument('-s', '--sparsity', type=restricted_float, default=0.95, help="sparsity of the matrices (0.0 for dense, close to 1.0 for very sparse)")
-    helper.add_argument('-a', '--approximation', action='store_true', help='enable comparison with another polynomial-time approximation approach within a factor of at most 2')
+    helper.add_argument('-a', '--approximation', action='store_true', help='enable comparison with a polynomial-time approximation approach within a factor of at most 2')
     helper.add_argument('-b', '--bruteForce', action='store_true', help='enable comparison with the exponential-time brute-force approach')
     helper.add_argument('-c', '--count', action='store_true', help='calculate the size of the vertex cover')
     helper.add_argument('-w', '--write', action='store_true', help='write the generated random matrix to a file in the current directory')
     helper.add_argument('-v', '--verbose', action='store_true', help='anable verbose output')
     helper.add_argument('-l', '--log', action='store_true', help='enable file logging')
-    helper.add_argument('--version', action='version', version='%(prog)s 0.2.4')
+    helper.add_argument('--version', action='version', version='%(prog)s 0.2.5')
     
     # Initialize the parameters
     args = helper.parse_args()
@@ -62,15 +62,15 @@ def main():
         logger.info(f"Sparsity: {1 - (sparse_matrix.nnz / (sparse_matrix.shape[0] * sparse_matrix.shape[1]))}")
         
         if approximation:
-            logger.info("An Approximate Solution with an approximation ratio of at most 2 started")
+            logger.info("An approximate Solution with an approximation ratio of at most 2 started")
             started = time.time()
             
             approximate_result = algorithm.find_vertex_cover_approximation(graph)
 
-            logger.info(f"An Approximate Solution with an approximation ratio of at most 2 done in: {(time.time() - started) * 1000.0} milliseconds")
+            logger.info(f"An approximate Solution with an approximation ratio of at most 2 done in: {(time.time() - started) * 1000.0} milliseconds")
             
             answer = utils.string_result_format(approximate_result, count)
-            output = f"{i + 1}-Approximation Test: {answer}" 
+            output = f"{i + 1}-approximation Test: {answer}" 
             utils.println(output, logger, args.log)    
     
         if bruteForce:
@@ -86,12 +86,12 @@ def main():
             utils.println(output, logger, args.log)
         
 
-        logger.info("Our Solution with an approximation ratio of at most 1.75 started")
+        logger.info("Our Algorithm with an exact solution started")
         started = time.time()
         
         novel_result = algorithm.find_vertex_cover(graph)
 
-        logger.info(f"Our Solution with an approximation ratio of at most 1.75 done in: {(time.time() - started) * 1000.0} milliseconds")
+        logger.info(f"Our Algorithm with an exact solution done in: {(time.time() - started) * 1000.0} milliseconds")
 
         answer = utils.string_result_format(novel_result, count)
         output = f"{i + 1}-Varela Test: {answer}" 
