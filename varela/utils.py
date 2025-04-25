@@ -250,3 +250,15 @@ def is_independent_set(G, subset):
             if u != v and G.has_edge(u, v):
                 return False
     return True
+
+def graphs_are_identical(G1, G2):
+    # Check if nodes are the same (order doesn't matter)
+    if set(G1.nodes()) != set(G2.nodes()):
+        return False
+    
+    # Check if edges are the same (order doesn't matter)
+    if set(G1.edges()) != set(G2.edges()):
+        return False
+    
+    return True
+

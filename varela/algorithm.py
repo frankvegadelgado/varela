@@ -40,8 +40,20 @@ def find_vertex_cover(graph):
     # Create a working copy of the graph to iteratively modify during the vertex cover computation.
     iterative_graph = graph.copy()
 
+    # Initialize an empty graph to store the previous state of iterative_graph for cycle detection.
+    previous_new_graph = nx.Graph()
+
     # Continue iterating until the current set forms a vertex cover for the original graph.
     while not utils.is_vertex_cover(graph, approximate_vertex_cover):
+
+        # Check if the current iterative_graph is identical to the previous iteration's graph (cycle detection).
+        # If identical, use NetworkX's min_weighted_vertex_cover to break the loop and finalize the vertex cover.
+        if utils.graphs_are_identical(iterative_graph, previous_new_graph):
+            approximate_vertex_cover.update(nx.approximation.vertex_cover.min_weighted_vertex_cover(iterative_graph))
+            break
+        # Otherwise, store the current iterative_graph as the previous state for the next iteration.
+        else:
+            previous_new_graph = iterative_graph                
 
         # Create a new bipartite graph to transform the current iterative graph for dominating set computation.
         new_graph = nx.Graph()
@@ -77,6 +89,7 @@ def find_vertex_cover(graph):
 
     # Return the computed approximate vertex cover set.
     return approximate_vertex_cover
+
 
 def find_vertex_cover_brute_force(graph):
     """
