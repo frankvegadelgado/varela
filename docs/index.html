@@ -32,7 +32,7 @@
     ></script>
   </head>
   <body>
-    <h1>Varela: Minimum Vertex Cover Solver</h1>
+    <h1>Varela: Approximate Vertex Cover Solver</h1>
     <p>
       <img
         src="varela.jpg"
@@ -42,8 +42,9 @@
     <p>
       This work builds upon
       <a
-        href="https://dev.to/frank_vega_987689489099bf/polynomial-time-algorithm-for-mvc-p-np-28n6"
-        >Polynomial-Time Algorithm for MVC (P = NP)</a
+        href="https://dev.to/frank_vega_987689489099bf/efficient-vertex-cover-approximation-via-iterative-dominating-set-transformations-40i9"
+        >Efficient Vertex Cover Approximation via Iterative Dominating Set
+        Transformations</a
       >.
     </p>
     <hr />
@@ -232,7 +233,7 @@ cd varela
     <p><strong>Output:</strong></p>
     <pre><code class="language-bash">usage: cover [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Compute the Exact Minimum Vertex Cover for undirected graph encoded in DIMACS format.
+Compute the Approximate Vertex Cover for undirected graph encoded in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
@@ -261,7 +262,7 @@ options:
     <p>This will display the following help information:</p>
     <pre><code class="language-bash">usage: batch_cover [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Compute the Exact Minimum Vertex Cover for all undirected graphs encoded in DIMACS format and stored in a directory.
+Compute the Approximate Vertex Cover for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit

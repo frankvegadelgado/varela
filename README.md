@@ -1,8 +1,8 @@
-# Varela: Minimum Vertex Cover Solver
+# Varela: Approximate Vertex Cover Solver
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [Polynomial-Time Algorithm for MVC (P = NP)](https://dev.to/frank_vega_987689489099bf/polynomial-time-algorithm-for-mvc-p-np-28n6).
+This work builds upon [Efficient Vertex Cover Approximation via Iterative Dominating Set Transformations](https://dev.to/frank_vega_987689489099bf/efficient-vertex-cover-approximation-via-iterative-dominating-set-transformations-40i9).
 
 ---
 
@@ -137,7 +137,7 @@ cover -h
 ```bash
 usage: cover [-h] -i INPUTFILE [-a] [-b] [-c] [-v] [-l] [--version]
 
-Compute the Exact Minimum Vertex Cover for undirected graph encoded in DIMACS format.
+Compute the Approximate Vertex Cover for undirected graph encoded in DIMACS format.
 
 options:
   -h, --help            show this help message and exit
@@ -168,7 +168,7 @@ This will display the following help information:
 ```bash
 usage: batch_cover [-h] -i INPUTDIRECTORY [-a] [-b] [-c] [-v] [-l] [--version]
 
-Compute the Exact Minimum Vertex Cover for all undirected graphs encoded in DIMACS format and stored in a directory.
+Compute the Approximate Vertex Cover for all undirected graphs encoded in DIMACS format and stored in a directory.
 
 options:
   -h, --help            show this help message and exit

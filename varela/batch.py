@@ -29,7 +29,7 @@ def approximate_solutions(inputDirectory, verbose=False, log=False, count=False,
 def main():
     
     # Define the parameters
-    helper = argparse.ArgumentParser(prog="batch_cover", description="Compute the Exact Minimum Vertex Cover for all undirected graphs encoded in DIMACS format and stored in a directory.")
+    helper = argparse.ArgumentParser(prog="batch_cover", description="Compute the Approximate Vertex Cover for all undirected graphs encoded in DIMACS format and stored in a directory.")
     helper.add_argument('-i', '--inputDirectory', type=str, help='Input directory path', required=True)
     helper.add_argument('-a', '--approximation', action='store_true', help='enable comparison with a polynomial-time approximation approach within a factor of at most 2')
     helper.add_argument('-b', '--bruteForce', action='store_true', help='enable comparison with the exponential-time brute-force approach')

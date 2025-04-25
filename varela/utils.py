@@ -240,3 +240,13 @@ def is_vertex_cover(graph, vertex_cover):
         if u not in vertex_cover and v not in vertex_cover:
             return False
     return True
+
+def is_independent_set(G, subset):
+    """
+    Checks if a subset of nodes forms an independent set in the graph.
+    """
+    for u in subset:
+        for v in subset:
+            if u != v and G.has_edge(u, v):
+                return False
+    return True

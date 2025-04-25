@@ -86,12 +86,12 @@ def main():
             utils.println(output, logger, args.log)
         
 
-        logger.info("Our Algorithm with an exact solution started")
+        logger.info("Our Algorithm with an approximate solution started")
         started = time.time()
         
         novel_result = algorithm.find_vertex_cover(graph)
 
-        logger.info(f"Our Algorithm with an exact solution done in: {(time.time() - started) * 1000.0} milliseconds")
+        logger.info(f"Our Algorithm with an approximate solution done in: {(time.time() - started) * 1000.0} milliseconds")
 
         answer = utils.string_result_format(novel_result, count)
         output = f"{i + 1}-Varela Test: {answer}" 
