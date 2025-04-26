@@ -55,14 +55,14 @@ def find_vertex_cover(graph):
         else:
             previous_new_graph = iterative_graph                
 
-        # Create a new bipartite graph to transform the current iterative graph for dominating set computation.
+        # Create a new graph to transform the current iterative graph for dominating set computation.
         new_graph = nx.Graph()
 
-        # Construct the new bipartite graph by creating tuple nodes for each vertex and edge.
+        # Construct the new graph by creating tuple nodes for each vertex and edge.
         for i in iterative_graph.nodes():
             for j in iterative_graph.neighbors(i):
                 if i < j:  # Ensure each edge (i, j) is processed only once by ordering i < j.
-                    # Add edges to represent the bipartite structure:
+                    # Add edges to represent the vertex cover structure:
                     # (i, i) to (i, j): vertex i's representative to edge (i, j).
                     # (j, j) to (i, j): vertex j's representative to edge (i, j).
                     # (i, i) to (j, j): connect the vertex representatives.
@@ -70,7 +70,7 @@ def find_vertex_cover(graph):
                     new_graph.add_edge((j, j), (i, j))
                     new_graph.add_edge((i, i), (j, j))
 
-        # Use Baldor's 2-approximation algorithm to find a dominating set in the new bipartite graph.
+        # Use Baldor's 2-approximation algorithm to find a dominating set in the new graph.
         # This dominating set corresponds to a vertex cover in the original graph via the transformation.
         tuple_vertex_cover = alg.find_dominating_set(new_graph)
 
