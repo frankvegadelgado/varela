@@ -2,12 +2,12 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 
 NAME = "varela"
 
 INSTALL_REQUIRES = [
-    "baldor>=0.1.3"
+    "baldor>=0.1.4"
 ]
 
 setuptools.setup(
