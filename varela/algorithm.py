@@ -61,7 +61,7 @@ def find_vertex_cover(graph):
         # Construct the new graph by creating tuple nodes for each vertex and edge.
         for i in iterative_graph.nodes():
             for j in iterative_graph.neighbors(i):
-                if i < j:  # Ensure each edge (i, j) is processed only once by ordering i < j.
+                if not new_graph.has_edge((i, i), (j, j)):  # Ensure each edge (i, j) is processed only once by ordering i < j.
                     # Add edges to represent the vertex cover structure:
                     # (i, i) to (i, j): vertex i's representative to edge (i, j).
                     # (j, j) to (i, j): vertex j's representative to edge (i, j).
