@@ -2,14 +2,12 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.3.2"
+VERSION = "0.3.3"
 
 NAME = "varela"
 
 INSTALL_REQUIRES = [
-    "numpy>=2.2.1",
-    "scipy>=1.15.0",
-    "networkx[default]>=3.4.2"
+    "hvala>=0.0.7"
 ]
 
 setuptools.setup(
@@ -19,7 +17,7 @@ setuptools.setup(
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
-        "Documentation Research": "https://github.com/frankvegadelgado/varela",
+        "Documentation Research": "https://dev.to/frank_vega_987689489099bf/the-varela-algorithm-3nbm",
     },
     author="Frank Vega",
     author_email="vega.frank@gmail.com",

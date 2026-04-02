@@ -2,7 +2,7 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [Varela: Approximate Vertex Cover Solver](https://github.com/frankvegadelgado/varela).
+This work builds upon [The Varela Algorithm](https://dev.to/frank_vega_987689489099bf/the-varela-algorithm-3nbm).
 
 ---
 
@@ -215,6 +215,14 @@ options:
 # Code
 
 - Python implementation by **Frank Vega**.
+
+---
+
+# Complexity
+
+```diff
++ This algorithm finds near-optimal solutions for the hard Minimum Vertex Cover problem in polynomial time, with an approximation ratio below √2. This breakthrough challenges the computational boundaries of P vs. NP providing strong evidence that P = NP.
+```
 
 ---
 
