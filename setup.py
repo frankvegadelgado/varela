@@ -2,12 +2,14 @@ from pathlib import Path
 
 import setuptools
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 
 NAME = "varela"
 
 INSTALL_REQUIRES = [
-    "baldor>=0.1.4"
+    "numpy>=2.2.1",
+    "scipy>=1.15.0",
+    "networkx[default]>=3.4.2"
 ]
 
 setuptools.setup(
@@ -17,7 +19,7 @@ setuptools.setup(
     url="https://github.com/frankvegadelgado/varela",
     project_urls={
         "Source Code": "https://github.com/frankvegadelgado/varela",
-        "Documentation Research": "https://dev.to/frank_vega_987689489099bf/efficient-vertex-cover-approximation-via-iterative-dominating-set-transformations-40i9",
+        "Documentation Research": "https://github.com/frankvegadelgado/varela",
     },
     author="Frank Vega",
     author_email="vega.frank@gmail.com",
@@ -27,7 +29,7 @@ setuptools.setup(
         "Topic :: Software Development",
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.12",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
@@ -35,7 +37,7 @@ setuptools.setup(
         "Intended Audience :: Science/Research",
         "Natural Language :: English",
     ],
-    python_requires=">=3.10",
+    python_requires=">=3.12",
     # Requirements
     install_requires=INSTALL_REQUIRES,
     packages=["varela"],

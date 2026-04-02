@@ -2,7 +2,7 @@
 
 ![Honoring the Memory of Felix Varela y Morales (Cuban Catholic priest and independence leader)](docs/varela.jpg)
 
-This work builds upon [Efficient Vertex Cover Approximation via Iterative Dominating Set Transformations](https://dev.to/frank_vega_987689489099bf/efficient-vertex-cover-approximation-via-iterative-dominating-set-transformations-40i9).
+This work builds upon [Varela: Approximate Vertex Cover Solver](https://github.com/frankvegadelgado/varela).
 
 ---
 
@@ -65,7 +65,7 @@ where the fields W and V specify the endpoints of the edge while the lower-case 
 
 _Example Solution:_
 
-Vertex Cover Found `2, 3, 5`: Nodes `2`, `3`, and `5` constitute an optimal solution.
+Vertex Cover Found `1, 2, 3`: Nodes `1`, `2`, and `3` constitute an optimal solution.
 
 ---
 
@@ -73,7 +73,7 @@ Vertex Cover Found `2, 3, 5`: Nodes `2`, `3`, and `5` constitute an optimal solu
 
 ## Prerequisites
 
-- Python ≥ 3.10
+- Python ≥ 3.12
 
 ## Installation
 
@@ -101,10 +101,10 @@ pip install varela
    **Example Output:**
 
    ```
-   testMatrix1: Vertex Cover Found 2, 3, 5
+   testMatrix1: Vertex Cover Found 1, 2, 3
    ```
 
-   This indicates nodes `2, 3, 5` form a vertex cover.
+   This indicates nodes `1, 2, 3` form a vertex cover.
 
 ---
 
